@@ -5,7 +5,7 @@ Repositio para el proyecto de la materia DEVOPS de la UP. La tematica del proyec
 Para el frontend en caso de llegar seria dar una representacion visual y de la administracion a traves de una ui de la api a desarrollar.
 
 > [!NOTE]
-> Esta aplicion debe ser ejecutada en un entorno Linux/Mac. Por lo que en caso de utilizar windows debera instalar WSL.  
+> Esta aplicion debe ser ejecutada en un entorno Linux/Mac. Por lo que en caso de utilizar Windows debera instalar WSL.  
 
 ## Frontend
 
