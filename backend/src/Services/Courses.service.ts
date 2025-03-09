@@ -74,6 +74,15 @@ export class CoursesService {
       })),
     );
   }
+  private async getCorrelatives(courseId: string) {
+    try {
+      return await this.dbClient.select().from(courseCorrelativesTable).where(
+        eq(courseCorrelativesTable.course, courseId),
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
   async deleteCourse(idCourse: string) {
     try {
       return (await this.dbClient.delete(coursesTable).where(
@@ -85,11 +94,16 @@ export class CoursesService {
   }
   async updateCourse(idCourse: string, courseData: NewCourse) {
     try {
-      return await this.dbClient.update(coursesTable).set({
+      const result = await this.dbClient.update(coursesTable).set({
         name: courseData.name,
         description: courseData.description,
         period: courseData.period,
       }).where(eq(coursesTable.id, idCourse));
+      const correlativesStatus = await this.getCorrelatives(idCourse);
+      const coursesToDelete = correlativesStatus?.filter((
+        corr,
+      ) => (!courseData.correlativesCourses.includes(corr.correlative)));
+      return result;
     } catch (error) {
       console.error(error);
     }
