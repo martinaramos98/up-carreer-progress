@@ -37,7 +37,15 @@ Para levantar la ddbb:
 ```
 turso dev --local-file ./local-file
 ```
+#### Drizzle Studio
 
+En caso de querer utilizar drizzle studio como db manager, debe ejecutarlo con algun package manager de node ya que por ahora no es compatible con deno:npm. 
+
+Para ello ejecute lo siguiente:
+```bash
+npm install
+npm db:studio
+```
 
 ### Swagger 
 

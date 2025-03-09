@@ -16,5 +16,14 @@ export const periodCoursesTable = sqliteTable("period_courses", {
   description: text("description"),
 });
 
+export const courseCorrelativesTable = sqliteTable("course_correlatives", {
+  course: text("course").notNull().references(() => coursesTable.id, {
+    onDelete: "cascade",
+  }),
+  correlative: text("correlative").notNull().references(() => coursesTable.id, {
+    onDelete: "cascade",
+  }),
+});
+
 export type Courses = InferSelectModel<typeof coursesTable>;
 export type PeriodCourses = InferSelectModel<typeof periodCoursesTable>;

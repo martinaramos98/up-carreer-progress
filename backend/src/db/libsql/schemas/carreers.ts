@@ -19,5 +19,5 @@ export const carreerCoursesTable = sqliteTable("carreer_courses", {
   }),
 }, (table) => [primaryKey({ columns: [table.carreer, table.courses] })]);
 
-export type Carreers = InferSelectModel<typeof carrersTable>;
+export type Carreer = InferSelectModel<typeof carrersTable>;
 export type CarreerCourses = InferSelectModel<typeof carreerCoursesTable>;

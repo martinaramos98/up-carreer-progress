@@ -1,11 +1,13 @@
 {
   "tasks": {
     "dev": "deno run --allow-net --watch main.ts",
-    "db:generate": "deno run ",
-    "db:push": "",
-    "db:studio": "deno run npm:drizzle-studio"
+    "db:generate": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit generate",
+    "db:push": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit push",
+
+    "db:studio": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit studio"
   },
   "imports": {
+    "@libsql/client": "npm:@libsql/client@^0.14.0",
     "@std/assert": "jsr:@std/assert@1",
     "@types/express": "npm:@types/express@^5.0.0",
     "drizzle-kit": "npm:drizzle-kit@^0.30.5",

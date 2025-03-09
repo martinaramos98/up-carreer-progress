@@ -1,5 +1,0 @@
-{
-  "imports": {
-    "@libsql/client": "npm:@libsql/client@^0.14.0"
-  }
-}

@@ -11,7 +11,7 @@ import express from "express";
 const app = express();
 
 app.get("/", (req, res) => {
-  res.send("Welcome to the Dinosaur API!");
+  res.send("Welcome to the Carreers API!");
 });
 
 app.listen(8000);

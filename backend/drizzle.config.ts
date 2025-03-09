@@ -1,10 +1,10 @@
 import { defineConfig } from "drizzle-kit";
-
+import process from "node:process";
 export default defineConfig({
   out: "./drizzle",
-  schema: "./src/db/schemas",
-  dialect: "postgresql",
+  schema: "./src/db/libsql/schemas",
+  dialect: "turso",
   dbCredentials: {
-    url: Deno.env.get("DATABASE_URL")!,
+    url: process.env.DATABASE_URL ?? "http://127.0.0.1:8080",
   },
 });
