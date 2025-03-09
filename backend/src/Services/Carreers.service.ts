@@ -84,10 +84,10 @@ export class CarreerService {
     }
   }
   async updateCarreer(idCarreer: string, carreerData: NewCarreer) {
-    await this.dbClient.update(carrersTable).set({
+    return (await this.dbClient.update(carrersTable).set({
       name: carreerData.name,
       description: carreerData.description,
-    }).where(eq(carrersTable.id, idCarreer));
+    }).where(eq(carrersTable.id, idCarreer))).toJSON();
   }
   async loadCarreerWithCSV(file: File) {
   }

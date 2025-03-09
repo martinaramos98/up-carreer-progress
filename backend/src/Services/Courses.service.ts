@@ -74,4 +74,24 @@ export class CoursesService {
       })),
     );
   }
+  async deleteCourse(idCourse: string) {
+    try {
+      return (await this.dbClient.delete(coursesTable).where(
+        eq(coursesTable.id, idCourse),
+      )).toJSON();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  async updateCourse(idCourse: string, courseData: NewCourse) {
+    try {
+      return await this.dbClient.update(coursesTable).set({
+        name: courseData.name,
+        description: courseData.description,
+        period: courseData.period,
+      }).where(eq(coursesTable.id, idCourse));
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
