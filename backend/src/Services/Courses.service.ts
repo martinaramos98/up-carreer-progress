@@ -53,10 +53,13 @@ export class CoursesService {
           description: coursesData.description,
           period: coursesData.period,
         }).returning({ id: coursesTable.id });
-        await this.insertCorrelatives(
-          res[0].id,
-          coursesData.correlativesCourses,
-        );
+        if(coursesData.correlativesCourses.length > 0){
+          await this.insertCorrelatives(
+            res[0].id,
+            coursesData.correlativesCourses,
+          );
+        }
+        
         return res;
       }
     } catch (error) {
