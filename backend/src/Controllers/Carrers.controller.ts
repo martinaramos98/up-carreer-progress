@@ -26,11 +26,20 @@ export class CarreersController {
       });
     }
   }
+  async getCarreerCourses(req: Request, res: Response) {
+    try {
+      const carreerId = req.params.id;
+      const courses = await this.carrersService.getCarreerCourses(carreerId);
+      res.status(200).json(courses);
+    } catch (error) {
+      res.status(500).json({message:"Error on get courses on db data",error})
+    }
+  }
   async addNewCarreer(req: Request, res: Response) {
     try {
       const carreerData = req.body;
-      await this.carrersService.addNewCarrer(carreerData);
-      res.status(201).json({ message: "Carreer added" });
+      const result = await this.carrersService.addNewCarrer(carreerData);
+      res.status(200).json(result);
     } catch (error) {
       res.status(404).json({
         error: "Cannot add new carreer",
@@ -41,8 +50,8 @@ export class CarreersController {
   async deleteCarreer(req: Request, res: Response) {
     try {
       const carreerId = req.params.id;
-      await this.carrersService.deleteCarreer(carreerId);
-      res.status(200).json({ message: "Carreer deleted" });
+      const idResult = await this.carrersService.deleteCarreer(carreerId);
+      res.status(200).json(idResult);
     } catch (error) {
       res.status(404).json({
         error: "Cannot delete carreer",

@@ -4,5 +4,5 @@ export interface NewCarreer{
   description:string;
   duration:number;
   // FIXME: Ver bien que tipo va en realidad
-  correlativesCourses: string[];  
+  courses: string[];  
 }
