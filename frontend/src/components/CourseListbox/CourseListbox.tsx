@@ -7,11 +7,29 @@ import { Course } from "@/interfaces/Course";
 type Props = {
   onRemoveCourse: (courseId: Course) => void;
   courses: Course[];
+  handleAddCourse?: () => void;
+  handleCreateCourse?: () => void;
 };
 
 const CourseListbox = (props: Props) => {
   return (
-    <Listbox hideEmptyContent variant="bordered">
+    <Listbox hideEmptyContent selectionMode="none" variant="flat">
+      {props.handleAddCourse && (
+        <ListboxItem
+          description={"Adds a Course to your grade"}
+          onPress={props.handleAddCourse}
+        >
+          Add Courses
+        </ListboxItem>
+      )}
+      {props.handleCreateCourse && (
+        <ListboxItem
+          description={"Creates a new course on the system"}
+          onPress={props.handleCreateCourse}
+        >
+          New Course
+        </ListboxItem>
+      )}
       {props.courses.map((course) => (
         <ListboxItem
           key={course.id}

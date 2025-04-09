@@ -28,10 +28,12 @@
     "@heroui/snippet": "^2.2.17",
     "@heroui/switch": "^2.2.14",
     "@heroui/system": "2.4.12",
+    "@heroui/tabs": "^2.2.14",
     "@heroui/theme": "2.4.12",
     "@heroui/use-theme": "2.1.6",
     "@react-aria/visually-hidden": "3.8.20",
     "@react-types/shared": "3.28.0",
+    "@xyflow/react": "^12.5.5",
     "axios": "^1.8.4",
     "clsx": "2.1.1",
     "framer-motion": "11.15.0",
@@ -64,5 +66,6 @@
     "typescript": "5.6.3",
     "vite": "^5.2.0",
     "vite-tsconfig-paths": "^4.3.2"
-  }
+  },
+  "packageManager": "pnpm@10.2.1+sha512.398035c7bd696d0ba0b10a688ed558285329d27ea994804a52bad9167d8e3a72bcb993f9699585d3ca25779ac64949ef422757a6c31102c12ab932e5cbe5cc92"
 }

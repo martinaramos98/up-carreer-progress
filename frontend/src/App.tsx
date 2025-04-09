@@ -1,5 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
+import GradePage from "./pages/grade/GradePage";
+
 import NewGradePage from "@/pages/grade/NewGradePage";
 import IndexPage from "@/pages/index";
 import DocsPage from "@/pages/docs";
@@ -16,6 +18,7 @@ function App() {
       <Route element={<BlogPage />} path="/blog" />
       <Route element={<AboutPage />} path="/about" />
       <Route element={<NewGradePage />} path="/grade/new" />
+      <Route element={<GradePage />} path="/grade/:grade" />
     </Routes>
   );
 }

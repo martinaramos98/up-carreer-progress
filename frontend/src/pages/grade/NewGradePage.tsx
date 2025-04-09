@@ -1,6 +1,7 @@
 import { Input, Textarea } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { Form } from "@heroui/form";
+import { Button } from "@heroui/button";
 
 import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
@@ -41,6 +42,9 @@ const NewGradePage = (props: Props) => {
             addCourses={handleCourseSelect}
             selectedCourses={selectedCourses}
           />
+          <Button color="primary" type="submit" variant="flat">
+            Create Grade
+          </Button>
         </Form>
       </article>
     </DefaultLayout>
