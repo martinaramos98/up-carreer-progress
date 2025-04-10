@@ -1,22 +1,24 @@
-FROM denoland/deno:latest as DEV
+FROM denoland/deno:latest AS dev
 
 # Create working directory
 WORKDIR /app
 
-# Copy source
-COPY . .
+COPY ./deno.json .
+COPY ./main.ts .
+COPY ./src .
 
-# Compile the main app
 
-FROM denoland/deno:latest as BUILD
+RUN deno install 
+RUN deno cache main.ts
 
-RUN deno compile
-
+FROM denoland/deno:alpine AS prod
 WORKDIR /app
+COPY --from=dev /app .
 
-FROM denoland/deno:latest as DEPLOY
+RUN addgroup --system deno && \
+    adduser --system --ingroup deno deno
 
-WORKDIR /app
+USER deno
 
 # Run the app
 CMD ["deno", "run", "--allow-net","--allow-env","--env" ,"main.ts"]

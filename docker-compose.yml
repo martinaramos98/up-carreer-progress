@@ -1,17 +1,37 @@
 version: "3"
 services:
-  frontend:
+  frontend-dev:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     ports:
       - 3000:3000
     depends_on:
       - backend
-  backend:
+    profiles:
+      - dev
+  backend-dev:
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+  frontend-prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.main
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    profiles:
+      - prod
+  backend-prod:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.main
     ports:
       - 8000:8000
     depends_on:
