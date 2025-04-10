@@ -1,0 +1,22 @@
+FROM denoland/deno:latest as DEV
+
+# Create working directory
+WORKDIR /app
+
+# Copy source
+COPY . .
+
+# Compile the main app
+
+FROM denoland/deno:latest as BUILD
+
+RUN deno compile
+
+WORKDIR /app
+
+FROM denoland/deno:latest as DEPLOY
+
+WORKDIR /app
+
+# Run the app
+CMD ["deno", "run", "--allow-net","--allow-env","--env" ,"main.ts"]

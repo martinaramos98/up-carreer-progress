@@ -1,0 +1,24 @@
+FROM denoland/deno:latest as DEV
+
+# Create working directory
+WORKDIR /app
+
+# Copy source
+COPY . .
+
+RUN deno npm:install
+
+FROM denoland/deno:latest as BUILD
+WORKDIR /app
+
+COPY --from=DEV /app .
+RUN deno cache main.ts
+
+
+FROM denoland/deno:latest as DEPLOY
+WORKDIR /app
+
+COPY --from=BUILD /app .
+
+# Run the app
+CMD ["deno",  "run", "--allow-net","--allow-env","--env", "--watch" , "main.ts"]
