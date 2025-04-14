@@ -9,7 +9,7 @@ services:
     depends_on:
       - backend
     profiles:
-      - dev
+      - [dev]
   backend-dev:
     build:
       context: ./backend
@@ -18,6 +18,8 @@ services:
       - 8000:8000
     depends_on:
       - db
+    profiles:
+      - [dev]
   frontend-prod:
     build:
       context: ./frontend
@@ -27,7 +29,7 @@ services:
     depends_on:
       - backend
     profiles:
-      - prod
+      - [prod]
   backend-prod:
     build:
       context: ./backend
@@ -36,6 +38,8 @@ services:
       - 8000:8000
     depends_on:
       - db
+    profiles:
+      - [prod]
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
