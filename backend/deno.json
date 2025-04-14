@@ -1,17 +1,22 @@
 {
   "tasks": {
-    "dev": "deno run --env --allow-env  --allow-net --watch main.ts",
+    "dev": "deno run --env --allow-all --watch main.ts",
+    "start": "deno run --allow-all main.ts",
+    "test": "deno run execute_tests.ts",
+    "test:ui": "deno run --allow-all npm:@playwright/test test --headed",
+    "test:report":"deno run --allow-all npm:@playwright/test show-report",
+
     "db:generate": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit generate",
     "db:push": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit push",
 
     "db:studio": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit studio"
   },
   "imports": {
-    "@libsql/client": "npm:@libsql/client@^0.14.0",
-    "@std/assert": "jsr:@std/assert@1",
-    "@types/express": "npm:@types/express@^5.0.0",
-    "drizzle-kit": "npm:drizzle-kit@^0.30.5",
-    "drizzle-orm": "npm:drizzle-orm@^0.40.0",
-    "express": "npm:express@^4.21.2"
+    "@libsql/client": "npm:@libsql/client@^0.15.3",
+    "@std/assert": "jsr:@std/assert@^1.0.12",
+    "@types/express": "npm:@types/express@^5.0.1",
+    "drizzle-kit": "npm:drizzle-kit@^0.30.6",
+    "drizzle-orm": "npm:drizzle-orm@^0.41.0",
+    "express": "npm:express@^5.1.0"
   }
 }
