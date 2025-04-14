@@ -2,9 +2,9 @@
   "tasks": {
     "dev": "deno run --env --allow-all --watch main.ts",
     "start": "deno run --allow-all main.ts",
-    "test": "deno run execute_tests.ts",
-    "test:ui": "deno run --allow-all npm:@playwright/test test --headed",
-    "test:report":"deno run --allow-all npm:@playwright/test show-report",
+    "test": "deno run --allow-run execute_tests.ts",
+    "test:ui": "deno run  --allow-run execute_tests.ts --ui",
+    "test:report": "deno run --allow-all --node-modules-dir=auto npm:@playwright/test show-report",
 
     "db:generate": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit generate",
     "db:push": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit push",

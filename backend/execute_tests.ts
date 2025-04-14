@@ -1,5 +1,5 @@
 const server = new Deno.Command("deno", {
-  args: ["run", "dev"],
+  args: ["run" ,"start"],
   env: {
       DATABASE_URL: ':memory:',
       TEST_MODE: 'true',
@@ -13,11 +13,12 @@ const sp = server.spawn();
 console.log("Starting server...")
 await new Promise(resolve => setTimeout(resolve, 2000));
 
-
-const testing = new Deno.Command("deno", {
-  args: ["run","--allow-all","npm:playwright/test", "test"],
+const withUI = Deno.args.some((arg)=>(arg === '--ui'))
+const testing = new Deno.Command("pnpm", {
+  args: ["exec", "playwright", "test", withUI ? "--ui" : ""],
   stdout: "inherit",
-  stderr: "inherit"
+  stderr: "inherit",
+  windowsRawArguments:true
 })
 
 const tp = testing.spawn();

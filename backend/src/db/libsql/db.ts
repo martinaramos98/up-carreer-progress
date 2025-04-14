@@ -1,7 +1,7 @@
 import { createClient } from "npm:@libsql/client/node";
 import { drizzle } from "drizzle-orm/libsql";
 import { dbModeByEnv } from "../../utils/mode.util.ts";
-import {  pushSQLiteSchema } from "drizzle-kit/api"
+import { pushSQLiteSchema } from "drizzle-kit/api";
 import { periodCoursesTable } from "./schemas/courses.ts";
 import { coursesTable } from "./schemas/courses.ts";
 import { courseCorrelativesTable } from "./schemas/courses.ts";
@@ -12,11 +12,16 @@ const client = createClient({
 export const db = drizzle(client);
 export type LibSQLClient = typeof db;
 
-if(Deno.env.get("TEST_MODE") === "true"){
+if (Deno.env.get("TEST_MODE") === "true") {
   try {
-    console.log("pushing schema to LibSQL...");
-    await pushSQLiteSchema({periodCoursesTable,coursesTable,courseCorrelativesTable, carreerCoursesTable, carrersTable}, db);
-  } catch (error ){
+    await pushSQLiteSchema({
+      periodCoursesTable,
+      coursesTable,
+      courseCorrelativesTable,
+      carreerCoursesTable,
+      carrersTable,
+    }, db);
+  } catch (error) {
     console.error("Error pushing schema to LibSQL:", error);
   }
 }

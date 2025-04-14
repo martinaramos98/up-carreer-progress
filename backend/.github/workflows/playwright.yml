@@ -1,24 +1,32 @@
 name: Playwright Tests
 on:
   push:
-    branches: [ main, master ]
+    branches: [ main, develop]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, develop]
 jobs:
   test:
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
+    env: 
+      DENO_DIR: $HOME/.deno
     steps:
     - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: denoland/setup-deno@v2
       with:
-        node-version: lts/*
-    - name: Install dependencies
-      run: npm install -g pnpm && pnpm install
+        deno-version: v2.2.9 # Run with latest stable Deno.
+        path: ${{env.DENO_DIR}}
+        key: cache
+    - name: Install Deno Modules
+      run: deno install
     - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps
+      run: deno run npm:playwright install --with-deps 
+    # - name: Install dependencies
+    #   run: npm install -g pnpm && pnpm install
+    # - name: Install Playwright Browsers
+      # run: pnpm exec playwright install --with-deps
     - name: Run Playwright tests
-      run: pnpm exec playwright test
+      run: deno run test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
