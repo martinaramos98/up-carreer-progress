@@ -31,7 +31,7 @@ jobs:
     #   run: npm install -g pnpm && pnpm install
     # - name: Install Playwright Browsers
       # run: pnpm exec playwright install --with-deps
-    - name: Run Playwright tests
+    - name: Run Playwright test
       run: deno run test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
