@@ -1,7 +1,7 @@
 name: Backend Deployment
 on: 
  workflow_run:
-  workflows: ["Tests"]
+  workflows: [Tests]
   types: [completed]
 jobs:
   on-success:
@@ -11,9 +11,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: denoland/setup-deno@v2
       with:
-        deno-version: v2.2.9 # Run with latest stable Deno.
-        path: ${{env.DENO_DIR}}
-        key: cache
+        deno-version: v2.2.10 # Run with latest stable Deno.
 
   on-failure:
     runs-on: ubuntu-latest
