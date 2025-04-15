@@ -21,7 +21,7 @@ jobs:
     - uses: denoland/setup-deno@v2
       with:
         deno-version: v2.2.9 # Run with latest stable Deno.
-        path: ${{env.DENO_DIR}}
+        # path: ${{env.DENO_DIR}}
         key: cache
     - name: Install Deno Modules
       run: deno install
