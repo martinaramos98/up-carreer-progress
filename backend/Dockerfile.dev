@@ -1,0 +1,21 @@
+FROM denoland/deno:latest AS installer
+WORKDIR /app
+
+COPY ./deno.json .
+COPY ./main.ts .
+COPY ./src .
+
+RUN deno install 
+RUN deno cache main.ts
+
+FROM denoland/deno:latest AS dev
+WORKDIR /app
+COPY --from=installer /app .
+RUN addgroup --system deno && \
+    adduser --system --ingroup deno deno
+
+USER deno
+
+# Run the app
+CMD ["deno",  "run", "--allow-net","--allow-env","--env", "--watch" , "main.ts"]
+ 

@@ -1,0 +1,47 @@
+name: Tests Backend
+on:
+  push:
+    branches: 
+    - main
+    - qa
+    - dev
+    paths:
+      - "backend/**"
+  pull_request:
+    branches: 
+    - main
+    - qa
+    - dev
+    paths:
+      - "backend/**"
+jobs:
+  test:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    env: 
+      DENO_DIR: $HOME/.deno
+    steps:
+    - uses: actions/checkout@v4
+    - uses: denoland/setup-deno@v2
+      with:
+        deno-version: v2.2.10 # Run with latest stable Deno.
+        # path: ${{env.DENO_DIR}}
+    - name: Install Deno Modules
+      run: deno install
+      working-directory: ./backend
+    - name: Install Playwright Browsers
+      run: deno run --allow-all npm:playwright install --with-deps 
+      working-directory: ./backend
+    # - name: Install dependencies
+    #   run: npm install -g pnpm && pnpm install
+    # - name: Install Playwright Browsers
+      # run: pnpm exec playwright install --with-deps
+    - name: Run Playwright test
+      run: deno run test
+      working-directory: ./backend
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report
+        path: backend/playwright-report/
+        retention-days: 30

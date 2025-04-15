@@ -4,22 +4,27 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "node main.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "test": "playwright test"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@libsql/client": "^0.14.0",
-    "drizzle-kit": "^0.30.5",
-    "drizzle-orm": "^0.40.0",
-    "express": "^4.21.2"
+    "@libsql/client": "^0.15.3",
+    "drizzle-kit": "^0.30.6",
+    "drizzle-orm": "^0.41.0",
+    "express": "^5.1.0"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0"
+    "playwright": "^1.51.1",
+    "@playwright/test": "^1.51.1",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1"
   },
   "packageManager": "pnpm@10.2.1+sha512.398035c7bd696d0ba0b10a688ed558285329d27ea994804a52bad9167d8e3a72bcb993f9699585d3ca25779ac64949ef422757a6c31102c12ab932e5cbe5cc92"
 }
