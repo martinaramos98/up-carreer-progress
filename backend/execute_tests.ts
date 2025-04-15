@@ -14,8 +14,8 @@ console.log("Starting server...")
 await new Promise(resolve => setTimeout(resolve, 2000));
 
 const withUI = Deno.args.some((arg)=>(arg === '--ui'))
-const testing = new Deno.Command("pnpm", {
-  args: ["exec", "playwright", "test", withUI ? "--ui" : ""],
+const testing = new Deno.Command("deno", {
+  args: ["run","--allow-all","npm:playwright", "test", withUI ? "--ui" : ""],
   stdout: "inherit",
   stderr: "inherit",
   windowsRawArguments:true
