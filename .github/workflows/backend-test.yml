@@ -25,17 +25,17 @@ jobs:
         key: cache
     - name: Install Deno Modules
       run: deno install
-      working-directory: ../backend
+      working-directory: ./backend
     - name: Install Playwright Browsers
       run: deno run --allow-all npm:playwright install --with-deps 
-      working-directory: ../backend
+      working-directory: ./backend
     # - name: Install dependencies
     #   run: npm install -g pnpm && pnpm install
     # - name: Install Playwright Browsers
       # run: pnpm exec playwright install --with-deps
     - name: Run Playwright test
       run: deno run test
-      working-directory: ../backend
+      working-directory: ./backend
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
