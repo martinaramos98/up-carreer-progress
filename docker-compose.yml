@@ -1,11 +1,45 @@
 version: "3"
 services:
-  backend: 
-    build: 
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    profiles:
+      - [dev]
+  backend-dev:
+    build:
       context: ./backend
-      dockerfile: Dockerfile 
+      dockerfile: Dockerfile.dev
     ports:
       - 8000:8000
+    depends_on:
+      - db
+    profiles:
+      - [dev]
+  frontend-prod:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.main
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    profiles:
+      - [prod]
+  backend-prod:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.main
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    profiles:
+      - [prod]
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
