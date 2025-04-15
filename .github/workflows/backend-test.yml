@@ -1,4 +1,4 @@
-name: Tests
+name: Tests Backend
 on:
   push:
     branches: 
@@ -26,7 +26,6 @@ jobs:
       with:
         deno-version: v2.2.10 # Run with latest stable Deno.
         # path: ${{env.DENO_DIR}}
-        key: cache
     - name: Install Deno Modules
       run: deno install
       working-directory: ./backend
