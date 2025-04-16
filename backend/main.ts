@@ -9,6 +9,7 @@ import { coursesRoutes } from "./src/routes/courses.routes.ts";
 import { CarreerService } from "./src/Services/Carreers.service.ts";
 import { CarreersController } from "./src/Controllers/Carrers.controller.ts";
 import { carreersRoutes } from "./src/routes/carreers.routes.ts";
+import { setDBMockData } from "./mocks/mock.ts";
 
 console.log("starting server...");
 const app = express();
@@ -32,5 +33,8 @@ loadRoutes(app, [{
 app.get("/version", (_req, res) => {
   res.send("0.1.0");
 })
+if(Deno.env.get("TEST_MODE") === "true"){
+  setDBMockData()
+}
 console.log(`Server is running on http://localhost:8000`);
 
