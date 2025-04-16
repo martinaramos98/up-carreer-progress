@@ -3,9 +3,9 @@ FROM denoland/deno:latest AS dev
 # Create working directory
 WORKDIR /app
 
-COPY ./deno.json .
-COPY ./main.ts .
-COPY ./src .
+COPY --chown=deno:deno ./deno.json .
+COPY --chown=deno:deno ./main.ts .
+COPY --chown=deno:deno ./src .
 
 
 RUN deno install 
@@ -13,7 +13,7 @@ RUN deno cache main.ts
 
 FROM denoland/deno:alpine AS prod
 WORKDIR /app
-COPY --chown=deno:deno --from=dev /app .
+COPY --from=dev /app .
 
 USER deno
 
