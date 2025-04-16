@@ -7,14 +7,14 @@ on:
     - qa
     - dev
     paths:
-      - "backend/**"
+      - "frontend/**"
   pull_request:
     branches: 
     - main
     - qa
     - dev
     paths:
-      - "backend/**"
+      - "frontend/**"
 jobs:
   test:
     runs-on: ubuntu-latest

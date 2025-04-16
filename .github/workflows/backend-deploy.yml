@@ -36,4 +36,4 @@ jobs:
           context: ../backend
           file: ./Dockerfile.main
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}_up_backend:${{ github.sha }}
+          tags: ${{ secrets.DOCKER_USERNAME }}${{ github.sha }}
