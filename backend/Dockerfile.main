@@ -13,10 +13,7 @@ RUN deno cache main.ts
 
 FROM denoland/deno:alpine AS prod
 WORKDIR /app
-COPY --from=dev /app .
-
-RUN addgroup --system deno && \
-    adduser --system --ingroup deno deno
+COPY --chown=deno:deno --from=dev /app .
 
 USER deno
 
