@@ -36,4 +36,4 @@ jobs:
           context: ./backend # Cambiar el contexto a la carpeta backend
           file: ./backend/Dockerfile.main # Asegúrate de que el Dockerfile esté en la carpeta backend
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/up-progress-backend:${{ github.sha }}
+          tags: mramos39/up-progress-backend:${{ github.sha }}
