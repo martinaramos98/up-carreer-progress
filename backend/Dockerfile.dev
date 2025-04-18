@@ -1,9 +1,9 @@
 FROM denoland/deno:latest AS installer
 WORKDIR /app
 
-COPY ./deno.json .
-COPY ./main.ts .
-COPY ./src .
+COPY --chown=deno:deno ./deno.json .
+COPY --chown=deno:deno ./main.ts .
+COPY --chown=deno:deno ./src .
 
 RUN deno install 
 RUN deno cache main.ts
@@ -11,8 +11,6 @@ RUN deno cache main.ts
 FROM denoland/deno:latest AS dev
 WORKDIR /app
 COPY --from=installer /app .
-RUN addgroup --system deno && \
-    adduser --system --ingroup deno deno
 
 USER deno
 

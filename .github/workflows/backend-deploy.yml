@@ -7,12 +7,6 @@ jobs:
   on-success:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    steps: 
-    - uses: actions/checkout@v4
-    - uses: denoland/setup-deno@v2
-      with:
-        deno-version: v2.2.10 # Run with latest stable Deno.
-
   on-failure:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
@@ -33,7 +27,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: ./backend # Cambiar el contexto a la carpeta backend
-          file: ./backend/Dockerfile.main # Asegúrate de que el Dockerfile esté en la carpeta backend
+          context: ./backend 
+          file: ./backend/Dockerfile.main 
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/up-progress-backend:${{ github.sha }}

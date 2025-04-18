@@ -7,3 +7,10 @@ test('version get', async ({ request }) => {
 
   // Expect a title "to contain" a substring.
 });
+test('get Carreras', async ({ request }) => {
+  const response = await request.get("/carrers/");
+  expect(response.ok()).toBeTruthy();
+  expect(await response.json()).toBe([]);
+
+  // Expect a title "to contain" a substring.
+});
