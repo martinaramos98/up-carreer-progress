@@ -40,10 +40,10 @@ export class CarreersController {
       const carreerData = req.body;
       const result = await this.carrersService.addNewCarrer(carreerData);
       res.status(200).json(result);
-    } catch (error) {
-      res.status(404).json({
+    } catch (error: any) {
+      res.status(400).json({
         error: "Cannot add new carreer",
-        errorData: error,
+        description: error.message,
       });
     }
   }

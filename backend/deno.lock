@@ -917,7 +917,7 @@
         "npm:@playwright/test@^1.51.1",
         "npm:@types/express@^5.0.1",
         "npm:@types/node@^22.14.1",
-        "npm:drizzle-kit@~0.30.6",
+        "npm:drizzle-kit@0.31",
         "npm:drizzle-orm@0.41",
         "npm:express@^5.1.0",
         "npm:playwright@^1.51.1"
