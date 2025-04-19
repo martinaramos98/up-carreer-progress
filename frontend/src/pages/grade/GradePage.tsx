@@ -5,7 +5,6 @@ import DefaultLayout from "@/layouts/default";
 import { Grade } from "@/interfaces/Grade";
 import MapFlowView from "@/components/GradesViews/MapFlowView";
 import DiagramView from "@/components/GradesViews/DiagramView/DiagramView";
-type Props = {};
 const gradeMock: Grade = {
   id: "1",
   name: "Ingenieria en Informatica",
@@ -92,7 +91,7 @@ const gradeMock: Grade = {
   ],
 };
 
-const GradePage = (props: Props) => {
+const GradePage = () => {
   const grade = gradeMock;
 
   return (

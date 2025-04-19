@@ -1,5 +1,3 @@
-import React from "react";
-
 import DiagramYearGradeItem from "./DiagramYearGradeItem";
 
 import { Grade } from "@/interfaces/Grade";
@@ -18,6 +16,7 @@ const DiagramView = (props: Props) => {
         <DiagramYearGradeItem
           key={yearCourses.year}
           gradeStartDate={props.grade.startDate}
+          //@ts-expect-error FIXME: change when TakedCourseGrade is defined in backend
           yearCourses={yearCourses}
         />
       ))}

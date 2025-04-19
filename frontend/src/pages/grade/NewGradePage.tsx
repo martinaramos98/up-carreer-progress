@@ -7,18 +7,17 @@ import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
 import { useNewGradeForm } from "@/hooks/useNewGradeForm.hook";
 
-type Props = {};
-const NewGradePage = (props: Props) => {
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {}
+const NewGradePage = () => {
+  function handleSubmit() {}
   const {
     selectedCourses,
-    startDate,
+    // startDate,
     description,
     gradeName,
     handleCourseSelect,
     handleDescriptionChange,
     handleGradeNameChange,
-    handleStartDateChange,
+    // handleStartDateChange,
   } = useNewGradeForm();
 
   return (

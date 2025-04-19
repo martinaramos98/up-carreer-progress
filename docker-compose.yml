@@ -1,45 +1,5 @@
 version: "3"
 services:
-  frontend-dev:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.dev
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
-    profiles:
-      - [dev]
-  backend-dev:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.dev
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
-    profiles:
-      - [dev]
-  frontend-prod:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.main
-    ports:
-      - 3000:3000
-    depends_on:
-      - backend
-    profiles:
-      - [prod]
-  backend-prod:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.main
-    ports:
-      - 8000:8000
-    depends_on:
-      - db
-    profiles:
-      - [prod]
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
     platform: linux/amd64
@@ -50,3 +10,63 @@ services:
     #   - SQLD_NODE=primary
     volumes:
       - ./data/libsql:/var/lib/sqld
+  backend-dev:
+    environment: 
+      - NODE_ENV=development
+      - DOCKER=true 
+      - ENTITY_DB=libsql
+      - DATABASE_URL=http://db:8080
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    profiles:
+      - dev
+
+  frontend-dev:
+    environment: 
+      - NODE_ENV=development
+      - DOCKER=true 
+      - BACKEND_URL:http://backend:8000
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend-dev
+    profiles:
+      - dev
+
+  backend-prod:
+    environment: 
+      - NODE_ENV=production
+      - DOCKER=true 
+      - ENTITY_DB=libsql
+      - DATABASE_URL=http://db:8080
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.main
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    profiles:
+      - prod
+  frontend-prod:
+    environment: 
+      - NODE_ENV=production
+      - DOCKER=true 
+      - BACKEND_URL:http://backend-prod:8000
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile.main
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend-prod
+    profiles:
+      - prod

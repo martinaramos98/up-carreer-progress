@@ -33,16 +33,14 @@ const MapFlowView = (props: Props) => {
       };
     }),
   );
-  const [edges, setEdges] = useState<Edge[]>(
-    calculateEdges(props.grade.courses),
-  );
+  const [edges] = useState<Edge[]>(calculateEdges(props.grade.courses));
 
   const nodeTypes = {
     courseNode: CourseNode,
   };
 
   const onNodesChange = useCallback(
-    (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+    (changes: any) => setNodes((nds) => applyNodeChanges(changes, nds)),
     [setNodes],
   );
 

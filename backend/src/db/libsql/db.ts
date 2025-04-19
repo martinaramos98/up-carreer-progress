@@ -12,7 +12,7 @@ const client = createClient({
 export const db = drizzle(client);
 export type LibSQLClient = typeof db;
 
-if (Deno.env.get("TEST_MODE") === "true") {
+if (Deno.env.get("TEST_MODE") === "true" || Deno.env.get("DOCKER") === 'true') {
   try {
     await pushSQLiteSchema({
       periodCoursesTable,

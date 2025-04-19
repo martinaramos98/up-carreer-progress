@@ -1,5 +1,3 @@
-import React from "react";
-
 import DiagramCourseItem from "./DiagramCourseItem";
 
 import { GradeCourse } from "@/interfaces/Course";
