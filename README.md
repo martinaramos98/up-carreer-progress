@@ -10,11 +10,13 @@ Para el frontend en caso de llegar seria dar una representacion visual y de la a
 ## Frontend
 
 ### Tecnologias Utilizadas 
+
+
 ## Backend 
 
 ### Instalacion
 
-Para instalar la app debe contar con la version de *deno 2.2.3*, luego ejecutar: 
+Para instalar la app debe contar con la version de *deno 2.2.9*, luego ejecutar: 
 ```bash
 deno install
 ```
@@ -22,7 +24,12 @@ Para el desarrollo local sin docker debera instalar las siguientes aplicaciones 
 
 #### Base de Datos
 
-Turso?  
+Para el uso de la aplicacion utilizamos como base de datos libsql que es una variante de sqlite.   
+Puede ejecutarse desde la linea de comandos a traves de turso-cli o bien con docker compose a traves de la imagen provista.
+Para ejecutar desde turso-cli instale el mismo y luego ejecute lo siguiente:
+```bash
+
+```
 
 ### Desarrollo
 
@@ -47,11 +54,29 @@ npm install
 npm db:studio
 ```
 
+
 ### Swagger 
 
 ### Build
 
+
+### Testing (Backend) 
+
+Para los tests se ejecutan a traves de el frameowork de playwright.
+Para ejecutar los test tiene 2 opciones: 
+
+Con ui:
+
+
+### CI (Backend)
+
+Para el backend se encuentran 2 workflows uno dependiente del otro. 
+El primero es el que ejecuta los tests, y se ejecuta cuando se detecta un push o un pull request en las ramas main,qa y dev. Tambien, solo se activara cuando sean cambios que se encuentren en la carpeta.
+Si este workflow se completo, ejecutara otro que en caso de terminar bien los tests, realizara el deploy. 
+
 ### Registry Push
+
+
 
 
 ### Deploy 
@@ -64,18 +89,32 @@ Acá se encontrarán las principales librerias y tecnologias utilizadas para el 
 - Se utilizo como tecnologia [Deno](https://deno.com/), que es un interprete de **Javascript/Typescript**.
 - Como framework para la REST API se utilizo [Express](https://expressjs.com/)
 - Como **ORM** para la base de datos se utilizo [Drizzle](https://orm.drizzle.team/)
-- Como Base de Datos se utilizo: Turso? MongoDB? postgress?
+- Como Base de Datos se utilizo: (libsqld)[https://github.com/tursodatabase/libsql]
+- Para tests integrales de la api, se utilizo [playwright](https://playwright.dev/) 
 
 
 
 ## Docker Compose
-Docker compose permite ejecutar un ambiente con varios docker images. Por ejemplo se puede buildear el backend, ddbb y frontend para el uso de todo junto en un solo entorno de ejecucion.
 
-Para levantar ejecute el comando:
+Docker compose permite ejecutar un ambiente con varios docker images. Por ejemplo se puede buildear el backend, ddbb y frontend para el uso de todo junto en un solo entorno de ejecucion y aislados entre si.
+Se configuro 2 opciones de ejecucion: 
+
+Para levantar en modo desarrollo:
+```bash
+docker-compose --profile dev up --build --watchdocker --profile  up --build 
 ```
-docker up --build
+Para levantar imagenes con buildeo de produccion:
+```bash
+docker-compose --profile prod up --build --watchdocker --profile  up --build 
 ```
-Para detener los nodos que se esten ejecutando incluso aquellos que quedaron ejecutandose por alguna razon:
+Si es la primera que ejecuta el entorno, debera generar los schemas para las tablas de la base de datos. Para ello, situese dentro de la carpeta `/backend` y luego ejecute:
+Para generar el .sql con las queries para la creacion de tablas:
+```bash
+npm run db:generate # puede reemplazar npm por su gestor de paquetes de preferencia
 ```
-docker down --orphans
+Para ejecutar el script:
+```bash
+npm run db:push # puede reemplazar npm por su gestor de paquetes de preferencia
 ```
+
+Ya puede utilizar docker-compose con la apliacion 🐳.
