@@ -2,13 +2,20 @@ import { Input, Textarea } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { Form } from "@heroui/form";
 import { Button } from "@heroui/button";
+import axios from "axios";
 
 import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
 import { useNewGradeForm } from "@/hooks/useNewGradeForm.hook";
+import useGradeService from "@/services/GradeService/GradeService.service";
 
 const NewGradePage = () => {
   function handleSubmit() {}
+  const restAgent = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+  });
+  const gradeService = useGradeService(restAgent);
+  const courseService = useGradeService(restAgent);
   const {
     selectedCourses,
     // startDate,
@@ -18,7 +25,7 @@ const NewGradePage = () => {
     handleDescriptionChange,
     handleGradeNameChange,
     // handleStartDateChange,
-  } = useNewGradeForm();
+  } = useNewGradeForm(gradeService);
 
   return (
     <DefaultLayout>

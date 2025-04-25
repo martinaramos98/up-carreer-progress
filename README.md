@@ -117,4 +117,4 @@ Para ejecutar el script:
 npm run db:push # puede reemplazar npm por su gestor de paquetes de preferencia
 ```
 
-Ya puede utilizar docker-compose con la apliacion 🐳.
+Ya puede utilizar docker-compose con la aplicacion 🐳.

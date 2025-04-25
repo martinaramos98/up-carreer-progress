@@ -8,3 +8,11 @@ export interface Grade {
   years: number;
   courses: Course[];
 }
+
+export interface GradeCreate {
+  name: string;
+  description: string;
+  startDate: Date;
+  years: number;
+  courses: Course[];
+}

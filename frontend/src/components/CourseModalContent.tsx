@@ -4,13 +4,14 @@ import AddModalContent from "./CourseModalContents/AddModalContent";
 import CreateModalContent from "./CourseModalContents/CreateModalContent";
 
 import { ModalType } from "@/hooks/useCourseSelector.hook";
-import { Course } from "@/interfaces/Course";
+import { Course, NewCourse } from "@/interfaces/Course";
 
 type Props = {
   modalType: ModalType;
   changeModalType: (modalType: ModalType) => void;
   addCourses: (courses: Course[]) => void;
   courses: Course[];
+  createCourse: (course: NewCourse) => void;
 };
 const CourseModalContent = (props: Props) => {
   return (

@@ -5,11 +5,12 @@ import CourseListbox from "./CourseListbox/CourseListbox";
 
 import { useCourseSelector } from "@/hooks/useCourseSelector.hook";
 import { ModalType } from "@/hooks/useCourseSelector.hook";
-import { Course } from "@/interfaces/Course";
+import { Course, NewCourse } from "@/interfaces/Course";
 
 type Props = {
   addCourses: (courses: Course[]) => void;
   selectedCourses: Course[];
+  createNewCourse: (course: NewCourse) => void;
 };
 
 const coursesMock: Course[] = [
@@ -36,11 +37,9 @@ const CourseSelector = (props: Props) => {
 
   function handleAddCourse() {
     openModal("add");
-    closeModal();
   }
   function handleCreateCourse() {
     openModal("create");
-    changeModalType("add");
   }
 
   return (

@@ -8,12 +8,21 @@ export interface Course {
 }
 export interface GradeCourse extends Course {
   status: GradeCourseStatus;
+  history: TakedCourse[];
+}
+export interface TakedCourse extends Course {
+  status: GradeCourseStatus;
   startDate: Date;
-  endDate: Date;
   gradeId: string;
+  endDate: Date;
   professor?: string;
-
-  history: [];
+}
+export interface NewCourse {
+  name: string;
+  description: string;
+  correlatives: Course[];
+  period: number;
+  year: number;
 }
 
 export interface CourseHistoryRegistry {
