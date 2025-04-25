@@ -4,10 +4,10 @@ export interface Course {
   description: string;
   correlatives: Course[];
   period: number;
-  year: number;
 }
 export interface GradeCourse extends Course {
   status: GradeCourseStatus;
+  year: number;
   history: TakedCourse[];
 }
 export interface TakedCourse extends Course {
@@ -22,7 +22,6 @@ export interface NewCourse {
   description: string;
   correlatives: Course[];
   period: number;
-  year: number;
 }
 
 export interface CourseHistoryRegistry {

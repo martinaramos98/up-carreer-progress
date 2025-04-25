@@ -5,35 +5,24 @@ import CourseListbox from "./CourseListbox/CourseListbox";
 
 import { useCourseSelector } from "@/hooks/useCourseSelector.hook";
 import { ModalType } from "@/hooks/useCourseSelector.hook";
-import { Course, NewCourse } from "@/interfaces/Course";
+import { Course } from "@/interfaces/Course";
+import { ICourseService } from "@/services/CoursesService/CourseService.service";
 
 type Props = {
   addCourses: (courses: Course[]) => void;
   selectedCourses: Course[];
-  createNewCourse: (course: NewCourse) => void;
+  courseService: ICourseService;
 };
 
-const coursesMock: Course[] = [
-  {
-    id: "1",
-    name: "Analisis 1",
-    description: "Analisis de funciones, derivadas e integrales",
-    correlatives: [],
-    year: 1,
-    period: 1,
-  },
-  {
-    id: "2",
-    name: "Algebra 1",
-    description: "Algebra de matrices y sistemas de ecuaciones",
-    correlatives: [],
-    year: 1,
-    period: 1,
-  },
-];
 const CourseSelector = (props: Props) => {
-  const { modalType, openModal, closeModal, isOpenModal, changeModalType } =
-    useCourseSelector();
+  const {
+    modalType,
+    openModal,
+    closeModal,
+    isOpenModal,
+    changeModalType,
+    courses,
+  } = useCourseSelector(props.courseService);
 
   function handleAddCourse() {
     openModal("add");
@@ -54,7 +43,8 @@ const CourseSelector = (props: Props) => {
         <CourseModalContent
           addCourses={props.addCourses}
           changeModalType={changeModalType}
-          courses={coursesMock}
+          courses={courses}
+          createCourse={props.courseService.createCourse}
           modalType={modalType as ModalType}
         />
       </Modal>

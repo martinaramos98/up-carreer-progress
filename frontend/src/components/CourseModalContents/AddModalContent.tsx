@@ -5,7 +5,7 @@ import { Autocomplete, AutocompleteItem } from "@heroui/autocomplete";
 import CourseListbox from "../CourseListbox/CourseListbox";
 
 import { Course } from "@/interfaces/Course";
-import { useCourseSelect } from "@/hooks/useCorrelativesSelector.hook";
+import { useCourseSelect } from "@/hooks/useCreateCourse.hook";
 import { ModalType } from "@/hooks/useCourseSelector.hook";
 
 type Props = {

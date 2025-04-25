@@ -2,7 +2,16 @@ import { Axios } from "axios";
 
 import { Course, NewCourse } from "@/interfaces/Course";
 import { IResult } from "@/utils/rest.util";
-export function useCourseService(restAgent: Axios) {
+
+export interface ICourseService {
+  getCourses: () => Promise<IResult<Course[] | unknown>>;
+  getCourse: (id: string) => Promise<IResult<Course | unknown>>;
+  createCourse: (course: NewCourse) => Promise<IResult<Course | unknown>>;
+  updateCourse: (course: Course) => Promise<IResult<Course | unknown>>;
+  deleteCourse: (id: string) => Promise<IResult<unknown>>;
+}
+
+export function useCourseService(restAgent: Axios): ICourseService {
   const getCourses = async (): Promise<IResult<Course[] | unknown>> => {
     try {
       const { data } = await restAgent.get<Course[]>("/courses");

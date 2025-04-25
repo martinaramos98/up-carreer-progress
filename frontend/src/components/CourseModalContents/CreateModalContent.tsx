@@ -1,15 +1,17 @@
 import { Input } from "@heroui/input";
 import { ModalBody, ModalFooter, ModalHeader } from "@heroui/modal";
+import { Select, SelectItem } from "@heroui/select";
 import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 
 import CorrelativeSelector from "../CorrelativesSelector/CorrelativeSelector";
 
-import { useCourseSelect } from "@/hooks/useCorrelativesSelector.hook";
-import { Course } from "@/interfaces/Course";
+import { useCreateCourse } from "@/hooks/useCreateCourse.hook";
+import { Course, NewCourse } from "@/interfaces/Course";
 
 type Props = {
-  course: Course[];
+  courses: Course[];
+  createCourse: (course: NewCourse) => void;
 };
 
 const CreateModalContent = (props: Props) => {
@@ -18,7 +20,10 @@ const CreateModalContent = (props: Props) => {
     availableCorrelativesToSelect,
     onSelectCorrelative,
     onRemoveCourse,
-  } = useCourseSelect(props.course);
+    onChageInputDataForm,
+    onCreateCourseHandler,
+    onSelectPeriodHandler,
+  } = useCreateCourse(props.courses, props.createCourse);
 
   return (
     <>
@@ -31,13 +36,18 @@ const CreateModalContent = (props: Props) => {
           label="Course Name"
           placeholder="Enter course name"
           type="text"
+          onChange={onChageInputDataForm}
         />
         <Input
           label="Description"
           placeholder="Enter course description"
           type="text"
+          onChange={onChageInputDataForm}
         />
-
+        <Select label="Period" onSelectionChange={onSelectPeriodHandler}>
+          <SelectItem key="1">Cuatrimestral</SelectItem>
+          <SelectItem key="2">Anual</SelectItem>
+        </Select>
         <div>
           <h4 className="text-lg font-semibold mb-2">
             Select correlatives of Course
@@ -62,7 +72,7 @@ const CreateModalContent = (props: Props) => {
       </ModalBody>
       <ModalFooter>
         <Button variant="light">Cancel</Button>
-        <Button color="success" variant="flat">
+        <Button color="success" variant="flat" onPress={onCreateCourseHandler}>
           Create Course
         </Button>
       </ModalFooter>

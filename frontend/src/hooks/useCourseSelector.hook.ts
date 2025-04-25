@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-export type ModalType = "add" | "create";
+import { ICourseService } from "@/services/CoursesService/CourseService.service";
 
-export const useCourseSelector = () => {
+export type ModalType = "add" | "create";
+export const useCourseSelector = (courseService: ICourseService) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalType, setModalType] = useState<ModalType>();
+  const [courses, setCourses] = useState();
 
   function openModal(modalType: ModalType) {
     setModalType(modalType);

@@ -24,7 +24,10 @@ const CourseModalContent = (props: Props) => {
         />
       )}
       {props.modalType === "create" && (
-        <CreateModalContent course={props.courses} />
+        <CreateModalContent
+          courses={props.courses}
+          createCourse={props.createCourse}
+        />
       )}
     </ModalContent>
   );

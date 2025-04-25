@@ -8,6 +8,7 @@ import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
 import { useNewGradeForm } from "@/hooks/useNewGradeForm.hook";
 import useGradeService from "@/services/GradeService/GradeService.service";
+import { useCourseService } from "@/services/CoursesService/CourseService.service";
 
 const NewGradePage = () => {
   function handleSubmit() {}
@@ -15,10 +16,9 @@ const NewGradePage = () => {
     baseURL: import.meta.env.VITE_API_URL,
   });
   const gradeService = useGradeService(restAgent);
-  const courseService = useGradeService(restAgent);
+  const courseService = useCourseService(restAgent);
   const {
     selectedCourses,
-    // startDate,
     description,
     gradeName,
     handleCourseSelect,
@@ -46,6 +46,7 @@ const NewGradePage = () => {
           <DatePicker label="Fecha de Inicio" />
           <CourseSelector
             addCourses={handleCourseSelect}
+            createNewCourse={courseService.createCourse}
             selectedCourses={selectedCourses}
           />
           <Button color="primary" type="submit" variant="flat">
