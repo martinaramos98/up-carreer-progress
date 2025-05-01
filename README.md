@@ -101,7 +101,7 @@ Se configuro 2 opciones de ejecucion:
 
 Para levantar en modo desarrollo:
 ```bash
-docker-compose --profile dev up --build --watchdocker --profile  up --build 
+docker-compose --profile dev up --build --watch
 ```
 Para levantar imagenes con buildeo de produccion:
 ```bash

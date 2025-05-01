@@ -13,8 +13,9 @@ import { useCourseService } from "@/services/CoursesService/CourseService.servic
 const NewGradePage = () => {
   function handleSubmit() {}
   const restAgent = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL,
   });
+
   const gradeService = useGradeService(restAgent);
   const courseService = useCourseService(restAgent);
   const {
@@ -25,7 +26,7 @@ const NewGradePage = () => {
     handleDescriptionChange,
     handleGradeNameChange,
     // handleStartDateChange,
-  } = useNewGradeForm(gradeService);
+  } = useNewGradeForm();
 
   return (
     <DefaultLayout>
@@ -43,10 +44,16 @@ const NewGradePage = () => {
             value={description}
             onChange={handleDescriptionChange}
           />
+          <Input
+            label="Years of Study"
+            type="number"
+            value={gradeName}
+            onChange={handleGradeNameChange}
+          />
           <DatePicker label="Fecha de Inicio" />
           <CourseSelector
             addCourses={handleCourseSelect}
-            createNewCourse={courseService.createCourse}
+            courseService={courseService}
             selectedCourses={selectedCourses}
           />
           <Button color="primary" type="submit" variant="flat">

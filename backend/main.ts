@@ -1,4 +1,5 @@
 import express from "npm:express";
+import cors from "npm:cors";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 globalThis.require = require;
@@ -14,6 +15,9 @@ console.log("starting server...");
 const app = express();
 app.listen(8000);
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
 loadRoutes(app, [{
   path: "/courses",
   Service: CoursesService,

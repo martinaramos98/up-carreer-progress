@@ -4,7 +4,7 @@ import { SharedSelection } from "@heroui/system";
 
 import { Course, NewCourse } from "@/interfaces/Course";
 export function useCreateCourse(
-  courses: Course[],
+  courses: Course[] = [],
   createCourse: (course: NewCourse) => void,
 ) {
   const schema = Yup.object().shape({
@@ -19,7 +19,7 @@ export function useCreateCourse(
   const [courseData, setCourseData] = useState<NewCourse>({
     name: "",
     description: "",
-    correlatives: [],
+    correlativesCourses: [],
     period: NaN,
   });
   const [errors, setErrors] = useState<Yup.InferType<typeof schema>>();
@@ -72,8 +72,10 @@ export function useCreateCourse(
     });
   }
   async function onCreateCourseHandler() {
-    if (schema.isValidSync(courseData, { abortEarly: true })) {
-      setErrors(await schema.validate(courseData));
+    if (!schema.isValidSync(courseData, { abortEarly: true })) {
+      const currentErrors = await schema.validate(courseData);
+
+      setErrors(currentErrors);
 
       return;
     }
@@ -81,7 +83,7 @@ export function useCreateCourse(
       name: courseData.name,
       description: courseData.description,
       period: courseData.period,
-      correlatives: correlativesSelected,
+      correlativesCourses: correlativesSelected,
     });
   }
   function onChageInputDataForm(event: React.ChangeEvent<HTMLInputElement>) {
@@ -92,7 +94,7 @@ export function useCreateCourse(
   function onSelectPeriodHandler(keys: SharedSelection) {
     setCourseData({
       ...courseData,
-      period: parseInt(keys.anchorKey as string),
+      period: keys.anchorKey as string,
     });
   }
 

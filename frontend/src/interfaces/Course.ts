@@ -5,6 +5,9 @@ export interface Course {
   correlatives: Course[];
   period: number;
 }
+export interface CourseWithCorrelatives extends Omit<Course, "correlatives"> {
+  correlatives: string[];
+}
 export interface GradeCourse extends Course {
   status: GradeCourseStatus;
   year: number;
@@ -20,8 +23,8 @@ export interface TakedCourse extends Course {
 export interface NewCourse {
   name: string;
   description: string;
-  correlatives: Course[];
-  period: number;
+  correlativesCourses: Course[];
+  period: string;
 }
 
 export interface CourseHistoryRegistry {

@@ -3,6 +3,7 @@ import { DBClient } from "../db/dbController.ts";
 import {
   courseCorrelativesTable,
   coursesTable,
+  CourseWithCorrelatives,
 } from "../db/libsql/schemas/courses.ts";
 import { eq, and, inArray } from "drizzle-orm";
 
@@ -14,7 +15,19 @@ export class CoursesService {
   }
   async getCourses() {
     try {
-      return await this.dbClient.select().from(coursesTable);
+      const courses = await this.dbClient.select().from(coursesTable);
+      const correlatives = await this.dbClient.select().from(courseCorrelativesTable);
+      const correlativesMap = new Map<string, string[]>();
+      correlatives.forEach((correlative) => {
+        if (!correlativesMap.has(correlative.course)) {
+          correlativesMap.set(correlative.course, []);
+        }
+        correlativesMap.get(correlative.course)?.push(correlative.correlative);
+      })
+      courses.forEach((course) => {
+        (course as CourseWithCorrelatives).correlatives = correlativesMap.get(course.id) || [];
+      })
+      return courses;
     } catch (error) {
       console.error(error);
     }
