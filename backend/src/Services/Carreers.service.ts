@@ -57,14 +57,13 @@ export class CarreerService  {
       console.error(error);
     }
   }
-  addNewCarrer(carreerData: NewCarreer) {
+  async addNewCarrer(carreerData: NewCarreer) {
     try {
 
       if(carreerData.courses.length === 0) {
         throw new Error("Courses array must have at least one course");
       }
-      this.dbClient.transaction(async (tx) => {
-
+      return await this.dbClient.transaction(async (tx) => {
         const res = await tx.insert(carrersTable).values({
           name: carreerData.name,
           description: carreerData.description,
@@ -75,7 +74,7 @@ export class CarreerService  {
             courses: course,
           })),
         );
-        return res;
+        return res[0];
       });
     } catch (error) {
       console.error(error);

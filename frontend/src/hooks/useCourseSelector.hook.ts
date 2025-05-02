@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 
 import { ICourseService } from "@/services/CoursesService/CourseService.service";
-import { Course } from "@/interfaces/Course";
+import { Course, NewCourse } from "@/interfaces/Course";
 
 export type ModalType = "add" | "create";
-export const useCourseSelector = (courseService: ICourseService) => {
+export const useCourseSelector = (
+  courseService: ICourseService,
+  addCourses: (courses: Course[]) => void,
+) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalType, setModalType] = useState<ModalType>();
   const [courses, setCourses] = useState<Course[]>();
@@ -25,6 +28,16 @@ export const useCourseSelector = (courseService: ICourseService) => {
       setCourses(response.data as Course[]);
     });
   }
+  function createCourseHandler(course: NewCourse) {
+    courseService.createCourse(course).finally(() => {
+      closeModal();
+    });
+  }
+
+  function addCoursesHandler(courses: Course[]) {
+    addCourses(courses);
+    closeModal();
+  }
 
   useEffect(onInit, []);
 
@@ -35,5 +48,7 @@ export const useCourseSelector = (courseService: ICourseService) => {
     modalType,
     changeModalType,
     courses,
+    createCourseHandler,
+    addCoursesHandler,
   };
 };

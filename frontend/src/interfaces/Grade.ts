@@ -14,5 +14,5 @@ export interface GradeCreate {
   description: string;
   startDate: Date;
   years: number;
-  courses: Course[];
+  courses: string[];
 }

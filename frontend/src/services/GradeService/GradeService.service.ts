@@ -3,7 +3,13 @@ import { Axios } from "axios";
 import { Grade, GradeCreate } from "@/interfaces/Grade";
 import { IResult } from "@/utils/rest.util";
 
-export default function useGradeService(restAgent: Axios) {
+export interface IGradeService {
+  createGrade: (grade: GradeCreate) => Promise<IResult<Grade | unknown>>;
+  getGrades: () => Promise<IResult<Grade[] | unknown>>;
+  getGrade: (id: string) => Promise<IResult<Grade | unknown>>;
+  updateGrade: (newGradeData: Grade) => Promise<IResult<Grade | unknown>>;
+}
+export default function useGradeService(restAgent: Axios): IGradeService {
   const createGrade = async (
     grade: GradeCreate,
   ): Promise<IResult<Grade | unknown>> => {

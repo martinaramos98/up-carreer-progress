@@ -1,4 +1,4 @@
-import { Listbox, ListboxItem } from "@heroui/listbox";
+import { Listbox, ListboxItem, ListboxSection } from "@heroui/listbox";
 import { Button } from "@heroui/button";
 import { Trash2 } from "lucide-react";
 
@@ -14,23 +14,28 @@ type Props = {
 const CourseListbox = (props: Props) => {
   return (
     <Listbox hideEmptyContent selectionMode="none" variant="flat">
-      <>
-        {props.handleAddCourse && (
-          <ListboxItem
-            description={"Adds a Course to your grade"}
-            onPress={props.handleAddCourse}
-          >
-            Add Courses
-          </ListboxItem>
-        )}
-        {props.handleCreateCourse && (
-          <ListboxItem
-            description={"Creates a new course on the system"}
-            onPress={props.handleCreateCourse}
-          >
-            New Course
-          </ListboxItem>
-        )}
+      <ListboxSection showDivider>
+        <>
+          {props.handleAddCourse && (
+            <ListboxItem
+              description={"Adds a Course to your grade"}
+              onPress={props.handleAddCourse}
+            >
+              Add Courses
+            </ListboxItem>
+          )}
+          {props.handleCreateCourse && (
+            <ListboxItem
+              description={"Creates a new course on the system"}
+              onPress={props.handleCreateCourse}
+            >
+              New Course
+            </ListboxItem>
+          )}
+        </>
+      </ListboxSection>
+
+      <ListboxSection showDivider title={"Added Courses"}>
         {props.courses.map((course) => (
           <ListboxItem
             key={course.id}
@@ -51,7 +56,7 @@ const CourseListbox = (props: Props) => {
             {course.name}
           </ListboxItem>
         ))}
-      </>
+      </ListboxSection>
     </Listbox>
   );
 };

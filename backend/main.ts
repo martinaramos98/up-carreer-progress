@@ -25,7 +25,7 @@ loadRoutes(app, [{
   routeLoader: coursesRoutes,
 },
 {
-  path: "/carreers",
+  path: "/grades",
   Service: CarreerService,
   Controller: CarreersController,
   routeLoader: carreersRoutes,

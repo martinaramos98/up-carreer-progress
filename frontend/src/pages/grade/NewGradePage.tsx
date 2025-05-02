@@ -11,7 +11,6 @@ import useGradeService from "@/services/GradeService/GradeService.service";
 import { useCourseService } from "@/services/CoursesService/CourseService.service";
 
 const NewGradePage = () => {
-  function handleSubmit() {}
   const restAgent = axios.create({
     baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL,
   });
@@ -22,17 +21,20 @@ const NewGradePage = () => {
     selectedCourses,
     description,
     gradeName,
+    years,
+    isPending,
     handleCourseSelect,
     handleDescriptionChange,
     handleGradeNameChange,
-    // handleStartDateChange,
-  } = useNewGradeForm();
+    submitAction,
+    handleYearsChange,
+  } = useNewGradeForm(gradeService);
 
   return (
     <DefaultLayout>
       <article className="w-[500px] mx-auto max-w-full">
         <h1 className="text-2xl font-semibold">New Grade</h1>
-        <Form className="items-center" onSubmit={handleSubmit}>
+        <Form action={submitAction} className="items-center">
           <Input
             label="Grade Name"
             type="text"
@@ -47,8 +49,8 @@ const NewGradePage = () => {
           <Input
             label="Years of Study"
             type="number"
-            value={gradeName}
-            onChange={handleGradeNameChange}
+            value={years.toString()}
+            onChange={handleYearsChange}
           />
           <DatePicker label="Fecha de Inicio" />
           <CourseSelector
@@ -56,7 +58,13 @@ const NewGradePage = () => {
             courseService={courseService}
             selectedCourses={selectedCourses}
           />
-          <Button color="primary" type="submit" variant="flat">
+          <Button
+            color="primary"
+            disabled={isPending}
+            isLoading={isPending}
+            type="submit"
+            variant="flat"
+          >
             Create Grade
           </Button>
         </Form>

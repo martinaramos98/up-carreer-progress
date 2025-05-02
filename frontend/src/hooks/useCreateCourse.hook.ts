@@ -15,7 +15,6 @@ export function useCreateCourse(
   const [correlativesSelected, setCorrelativesSelected] = useState<Course[]>(
     [],
   );
-
   const [courseData, setCourseData] = useState<NewCourse>({
     name: "",
     description: "",
@@ -39,12 +38,16 @@ export function useCreateCourse(
     if (!correlative) return;
     setCorrelativesSelected((prevState: Course[]) => {
       const prevAvailableCorrelatives = availableCorrelativesToSelect;
-      const coursesToAdd: Course[] = [];
+      let coursesToAdd: Course[] = [];
 
       recursivelyAddsCorrelatives(
         prevAvailableCorrelatives,
         coursesToAdd,
         correlative,
+      );
+      coursesToAdd = coursesToAdd.filter(
+        (courseToAdd) =>
+          !prevState.some((selected) => selected.id === courseToAdd.id),
       );
       const newState = [...prevState, ...coursesToAdd];
 

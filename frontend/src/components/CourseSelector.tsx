@@ -22,7 +22,9 @@ const CourseSelector = (props: Props) => {
     isOpenModal,
     changeModalType,
     courses,
-  } = useCourseSelector(props.courseService);
+    createCourseHandler,
+    addCoursesHandler,
+  } = useCourseSelector(props.courseService, props.addCourses);
 
   function handleAddCourse() {
     openModal("add");
@@ -41,10 +43,10 @@ const CourseSelector = (props: Props) => {
       />
       <Modal isOpen={isOpenModal} onClose={closeModal}>
         <CourseModalContent
-          addCourses={props.addCourses}
+          addCourses={addCoursesHandler}
           changeModalType={changeModalType}
           courses={courses}
-          createCourse={props.courseService.createCourse}
+          createCourse={createCourseHandler}
           modalType={modalType as ModalType}
         />
       </Modal>

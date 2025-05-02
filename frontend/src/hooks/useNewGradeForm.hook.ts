@@ -1,11 +1,18 @@
-import { useState } from "react";
+import { useActionState, useState } from "react";
+import { addToast } from "@heroui/toast";
 
 import { Course } from "@/interfaces/Course";
-export function useNewGradeForm() {
+import { IGradeService } from "@/services/GradeService/GradeService.service";
+export function useNewGradeForm(gradeService: IGradeService) {
   const [gradeName, setGradeName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date | null>(null);
+  const [years, setYears] = useState<number>(NaN);
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+  const [result, submitAction, isPending] = useActionState(
+    handleSubmit,
+    undefined,
+  );
 
   function handleGradeNameChange(event: React.ChangeEvent<HTMLInputElement>) {
     setGradeName(event.target.value);
@@ -16,8 +23,38 @@ export function useNewGradeForm() {
   function handleStartDateChange(date: Date | null) {
     setStartDate(date);
   }
+  function handleYearsChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setYears(parseInt(event.target.value));
+  }
   function handleCourseSelect(courses: Course[]) {
-    setSelectedCourses(courses);
+    const filteredCourses = courses.filter(
+      (course) =>
+        !selectedCourses.some((selected) => selected.id === course.id),
+    );
+
+    setSelectedCourses([...selectedCourses, ...filteredCourses]);
+  }
+  async function handleSubmit() {
+    try {
+      const result = await gradeService.createGrade({
+        name: gradeName,
+        description,
+        startDate: startDate as Date,
+        years: years,
+        courses: selectedCourses.map((course) => course.id),
+      });
+
+      if (!result.error) {
+        addToast({
+          title: "Grade created successfully",
+          description: "Grade was created with id: " + result.data.id,
+        });
+      }
+
+      return result;
+    } catch (error) {
+      console.error("Error creating grade:", error);
+    }
   }
 
   return {
@@ -25,9 +62,14 @@ export function useNewGradeForm() {
     selectedCourses,
     description,
     gradeName,
+    years,
     handleDescriptionChange,
     handleGradeNameChange,
     handleStartDateChange,
     handleCourseSelect,
+    handleYearsChange,
+    submitAction,
+    isPending,
+    result,
   };
 }
