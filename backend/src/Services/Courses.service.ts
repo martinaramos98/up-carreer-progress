@@ -46,52 +46,63 @@ export class CoursesService {
   async addNewCourses(coursesData: NewCourse | NewCourse[]) {
     try {
       if (Array.isArray(coursesData)) {
-        const res = await this.dbClient
+        await this.dbClient.transaction(async (tx) => {
+        const res = await tx
           .insert(coursesTable)
           .values(
             coursesData.map((course) => ({
               name: course.name,
               description: course.description,
               period: course.period,
+              year: course.year,
             }))
           )
           .returning({ id: coursesTable.id });
         const rows: Promise<void>[] = [];
         res.forEach((id, idx) => {
           rows.push(
-            this.insertCorrelatives(id.id, coursesData[idx].correlativesCourses)
+            this.insertCorrelatives(id.id, coursesData[idx].correlativesCourses,tx)
           );
         });
         await Promise.all(rows);
-        return res;
+
+        })
+        return await this.getCourses();
       } else {
-        const res = await this.dbClient
+        await this.dbClient.transaction(async (tx) => {
+          
+        const res = await tx 
           .insert(coursesTable)
           .values({
             name: coursesData.name,
             description: coursesData.description,
             period: coursesData.period,
+            year: coursesData.year,
           })
           .returning({ id: coursesTable.id });
         if (coursesData.correlativesCourses.length > 0) {
           await this.insertCorrelatives(
             res[0].id,
-            coursesData.correlativesCourses
+            coursesData.correlativesCourses,
+            tx
           );
         }
+        })
 
-        return res;
+        return await this.getCourses();
       }
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
   private async insertCorrelatives(
     courseId: string,
-    correlativesCourse: string[]
+    correlativesCourse: string[],
+    tx: any
   ) {
     if (correlativesCourse.length === 0) return;
-    await this.dbClient.insert(courseCorrelativesTable).values(
+    await tx.insert(courseCorrelativesTable).values(
       correlativesCourse.map((correlative) => ({
         correlative,
         course: courseId,

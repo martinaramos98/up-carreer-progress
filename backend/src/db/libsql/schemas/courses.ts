@@ -1,10 +1,13 @@
-import { sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { primaryKey, sqliteTable, text,integer } from "drizzle-orm/sqlite-core";
 import { InferSelectModel } from "drizzle-orm/table";
 import { relations } from "drizzle-orm";
+import { carrersTable } from "./carreers.ts";
+
 // === COURSES SCHEMA ===
 export const coursesTable = sqliteTable("courses", {
   id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
+  year: integer("year").notNull(),
   description: text("description"),
   period: text("period").notNull().references(() => periodCoursesTable.id, {
     onDelete: "cascade",
@@ -17,6 +20,7 @@ export const periodCoursesTable = sqliteTable("period_courses", {
   description: text("description"),
 });
 
+// === Courses Correlatives SCHEMA ===
 export const courseCorrelativesTable = sqliteTable("course_correlatives", {
   course: text("course").notNull().references(() => coursesTable.id, {
     onDelete: "cascade",
@@ -26,6 +30,21 @@ export const courseCorrelativesTable = sqliteTable("course_correlatives", {
   }),
 });
 
+// === Taked Courses Schema ===
+export const takedCoursesTable = sqliteTable("taked_courses", {
+  course: text("course").notNull().references(() => coursesTable.id, {
+    onDelete: "cascade",
+  }),
+  carreer: text("carreer").notNull().references(() => carrersTable.id, {
+    onDelete: "cascade",
+  }),
+  startDate: text("date").notNull(),
+  status: text("status").notNull(),
+  professor: text("professor"),
+
+},(table) => [primaryKey({ columns: [table.carreer, table.course,table.startDate] })])
+
+// === Courses Correlatives RELATIONS ===
 export const courseCorrelativesRelation = relations(courseCorrelativesTable, ({one}) => { 
   return {
     course: one(coursesTable, {

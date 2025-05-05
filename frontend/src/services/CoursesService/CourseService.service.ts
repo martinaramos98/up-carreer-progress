@@ -20,9 +20,10 @@ export function useCourseService(restAgent: Axios): ICourseService {
       const courses: Course[] = [];
 
       convertCourseToTreeCourse(data, courses);
+      console.log(courses);
 
       return {
-        data,
+        data: courses,
         error: false,
       };
     } catch (error) {

@@ -2,21 +2,19 @@ import { Input, Textarea } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { Form } from "@heroui/form";
 import { Button } from "@heroui/button";
-import axios from "axios";
 
 import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
 import { useNewGradeForm } from "@/hooks/useNewGradeForm.hook";
-import useGradeService from "@/services/GradeService/GradeService.service";
-import { useCourseService } from "@/services/CoursesService/CourseService.service";
+import { IGradeService } from "@/services/GradeService/GradeService.service";
+import { ICourseService } from "@/services/CoursesService/CourseService.service";
 
-const NewGradePage = () => {
-  const restAgent = axios.create({
-    baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL,
-  });
+export interface NewGradePageProps {
+  gradeService: IGradeService;
+  courseService: ICourseService;
+}
 
-  const gradeService = useGradeService(restAgent);
-  const courseService = useCourseService(restAgent);
+const NewGradePage = (props: NewGradePageProps) => {
   const {
     selectedCourses,
     description,
@@ -28,7 +26,7 @@ const NewGradePage = () => {
     handleGradeNameChange,
     submitAction,
     handleYearsChange,
-  } = useNewGradeForm(gradeService);
+  } = useNewGradeForm(props.gradeService);
 
   return (
     <DefaultLayout>
@@ -55,7 +53,7 @@ const NewGradePage = () => {
           <DatePicker label="Fecha de Inicio" />
           <CourseSelector
             addCourses={handleCourseSelect}
-            courseService={courseService}
+            courseService={props.courseService}
             selectedCourses={selectedCourses}
           />
           <Button

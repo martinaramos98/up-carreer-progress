@@ -29,9 +29,14 @@ export const useCourseSelector = (
     });
   }
   function createCourseHandler(course: NewCourse) {
-    courseService.createCourse(course).finally(() => {
-      closeModal();
-    });
+    courseService
+      .createCourse(course)
+      .then((result) => {
+        setCourses(result.data as Course[]);
+      })
+      .finally(() => {
+        closeModal();
+      });
   }
 
   function addCoursesHandler(courses: Course[]) {

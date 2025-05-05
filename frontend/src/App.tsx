@@ -1,24 +1,37 @@
 import { Route, Routes } from "react-router-dom";
+import axios from "axios";
 
 import GradePage from "./pages/grade/GradePage";
+import useGradeService from "./services/GradeService/GradeService.service";
+import { useCourseService } from "./services/CoursesService/CourseService.service";
 
 import NewGradePage from "@/pages/grade/NewGradePage";
 import IndexPage from "@/pages/index";
-import DocsPage from "@/pages/docs";
-import PricingPage from "@/pages/pricing";
-import BlogPage from "@/pages/blog";
-import AboutPage from "@/pages/about";
 
 function App() {
+  const restAgent = axios.create({
+    baseURL: import.meta.env.VITE_PUBLIC_BACKEND_URL,
+  });
+
+  const gradeService = useGradeService(restAgent);
+  const courseService = useCourseService(restAgent);
+
   return (
     <Routes>
-      <Route element={<IndexPage />} path="/" />
-      <Route element={<DocsPage />} path="/docs" />
-      <Route element={<PricingPage />} path="/pricing" />
-      <Route element={<BlogPage />} path="/blog" />
-      <Route element={<AboutPage />} path="/about" />
-      <Route element={<NewGradePage />} path="/grade/new" />
-      <Route element={<GradePage />} path="/grade/:grade" />
+      <Route element={<IndexPage gradeService={gradeService} />} path="/" />
+      <Route
+        element={
+          <NewGradePage
+            courseService={courseService}
+            gradeService={gradeService}
+          />
+        }
+        path="/grade/new"
+      />
+      <Route
+        element={<GradePage gradeService={gradeService} />}
+        path="/grade/:gradeId"
+      />
     </Routes>
   );
 }

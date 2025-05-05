@@ -9,8 +9,8 @@ export function useCreateCourse(
 ) {
   const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    description: Yup.string().required("Description is required"),
     period: Yup.number().required("Period is required"),
+    year: Yup.number().required("Year is required"),
   });
   const [correlativesSelected, setCorrelativesSelected] = useState<Course[]>(
     [],
@@ -19,9 +19,14 @@ export function useCreateCourse(
     name: "",
     description: "",
     correlativesCourses: [],
-    period: NaN,
+    period: "",
+    year: NaN,
   });
   const [errors, setErrors] = useState<Yup.InferType<typeof schema>>();
+
+  const courseMap = new Map<Key, Course>(
+    courses.map((course) => [course.id, structuredClone(course)]),
+  );
   const [availableCorrelativesToSelect, setAvailableCorrelativesToSelect] =
     useState<Course[]>([]);
 
@@ -31,9 +36,7 @@ export function useCreateCourse(
 
   function onSelectCorrelative(correlativeId: Key | null) {
     if (correlativeId === null) return;
-    const correlative = availableCorrelativesToSelect.find(
-      (course: Course) => course.id === correlativeId,
-    );
+    const correlative = courseMap.get(correlativeId);
 
     if (!correlative) return;
     setCorrelativesSelected((prevState: Course[]) => {
@@ -56,6 +59,7 @@ export function useCreateCourse(
       return newState;
     });
   }
+
   function onRemoveCourse(course: Course) {
     setCorrelativesSelected((prevState: Course[]) => {
       const coursesToAddToAvailables: Course[] = [];
@@ -86,7 +90,10 @@ export function useCreateCourse(
       name: courseData.name,
       description: courseData.description,
       period: courseData.period,
-      correlativesCourses: correlativesSelected,
+      year: parseInt(courseData.year),
+      correlativesCourses: correlativesSelected.map(
+        (correlative: Course) => correlative.id,
+      ),
     });
   }
   function onChageInputDataForm(event: React.ChangeEvent<HTMLInputElement>) {

@@ -7,6 +7,8 @@ export interface Grade {
   startDate: Date;
   years: number;
   courses: Course[];
+  approved: number;
+  totalCourses: number;
 }
 
 export interface GradeCreate {
