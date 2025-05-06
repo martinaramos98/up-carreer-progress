@@ -6,9 +6,6 @@ COPY --chown=deno:deno . .
 RUN deno install 
 
 USER deno
-ENV NEW_RELIC_NO_CONFIG_FILE=true
-ENV NEW_RELIC_DISTRIBUTED_TRACING_ENABLED=true
-ENV NEW_RELIC_LOG=stdout
 
 # Run the app
 CMD ["deno",  "run", "--env", "--allow-all" , "--watch" , "main.ts"]
