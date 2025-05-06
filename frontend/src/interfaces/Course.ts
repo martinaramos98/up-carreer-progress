@@ -12,7 +12,7 @@ export interface CourseWithCorrelatives extends Omit<Course, "correlatives"> {
 export interface GradeCourse extends Course {
   status: GradeCourseStatus;
   year: number;
-  history: TakedCourse[];
+  takedCourses: TakedCourse[];
 }
 export interface TakedCourse extends Course {
   status: GradeCourseStatus;

@@ -11,7 +11,12 @@ export function useGrade(gradeService: IGradeService, gradeId: string) {
   async function getGradeData() {
     try {
       setIsLoading(true);
-      setGrade((await gradeService.getGrade(gradeId)).data);
+      const grade = (await gradeService.getGrade(gradeId)).data as Grade;
+
+      grade.courses = grade.courses.sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
+      setGrade(grade);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching grade data:", error);

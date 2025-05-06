@@ -39,7 +39,7 @@ export function useNewGradeForm(gradeService: IGradeService) {
       const result = await gradeService.createGrade({
         name: gradeName,
         description,
-        startDate: startDate as Date,
+        startDate: (startDate as Date).toISOString(),
         years: years,
         courses: selectedCourses.map((course) => course.id),
       });
