@@ -1,8 +1,7 @@
-import 'npm:newrelic';
+import * as Sentry from "npm:@sentry/deno";
 import express from "npm:express";
 import cors from "npm:cors";
 import { createRequire } from "node:module";
-import newrelic from "npm:newrelic";
 const require = createRequire(import.meta.url);
 globalThis.require = require;
 import { loadRoutes } from "./src/utils/loadRoutes.util.ts";
@@ -12,9 +11,9 @@ import { coursesRoutes } from "./src/routes/courses.routes.ts";
 import { CarreerService } from "./src/Services/Carreers.service.ts";
 import { CarreersController } from "./src/Controllers/Carrers.controller.ts";
 import { carreersRoutes } from "./src/routes/carreers.routes.ts";
-addEventListener("error", (event) => {
-  console.error("Error no controlado:", event.error);
-  newrelic.noticeError(event.error);
+
+Sentry.init({
+  dsn: Deno.env.get("SENTRY_DSN"),
 });
 const app = express();
 app.listen(8000);
@@ -47,4 +46,3 @@ if(Deno.env.get("TEST_MODE") === "true"){
   })
 }
 console.log(`Server is running on http://localhost:8000`);
-

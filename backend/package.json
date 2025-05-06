@@ -16,11 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "@libsql/client": "^0.15.3",
+    "@sentry/deno": "^9.15.0",
     "cors": "^2.8.5",
     "drizzle-kit": "^0.31.0",
     "drizzle-orm": "^0.41.0",
-    "express": "^5.1.0",
-    "newrelic": "^12.18.2"
+    "express": "^5.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.51.1",
