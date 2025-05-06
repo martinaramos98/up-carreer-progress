@@ -1,6 +1,5 @@
 import { primaryKey, sqliteTable, text,integer } from "drizzle-orm/sqlite-core";
 import { InferSelectModel } from "drizzle-orm/table";
-import { relations } from "drizzle-orm";
 import { carrersTable } from "./carreers.ts";
 
 // === COURSES SCHEMA ===
@@ -44,26 +43,6 @@ export const takedCoursesTable = sqliteTable("taked_courses", {
 
 },(table) => [primaryKey({ columns: [table.carreer, table.course,table.startDate] })])
 
-// === Courses Correlatives RELATIONS ===
-export const courseCorrelativesRelation = relations(courseCorrelativesTable, ({one}) => { 
-  return {
-    course: one(coursesTable, {
-      fields: [courseCorrelativesTable.course],
-      references: [coursesTable.id],
-      relationName:"course"
-    }),
-    correlative: one(coursesTable, {
-      fields: [courseCorrelativesTable.correlative],
-      references: [coursesTable.id],
-      relationName:"correlative"
-    }),
-  }
- })
- export const coursesRelations = relations(coursesTable, ({ many }) => ({
-  correlatives: many(courseCorrelativesTable, {
-    relationName: 'course',
-  }),
-}))
 
 export type Course = InferSelectModel<typeof coursesTable>;
 export type PeriodCourses = InferSelectModel<typeof periodCoursesTable>;

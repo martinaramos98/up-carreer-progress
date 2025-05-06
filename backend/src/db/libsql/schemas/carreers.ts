@@ -1,7 +1,6 @@
 import { primaryKey, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { coursesTable } from "./courses.ts";
 import { InferSelectModel } from "drizzle-orm/table";
-import { relations } from "drizzle-orm/relations";
 
 export const carrersTable = sqliteTable("carrers", {
   id: text("id")
@@ -9,6 +8,7 @@ export const carrersTable = sqliteTable("carrers", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   description: text("description"),
+  startDate: text("start_date").notNull(),
 });
 
 export const carreerCoursesTable = sqliteTable("carreer_courses", {
@@ -19,19 +19,6 @@ export const carreerCoursesTable = sqliteTable("carreer_courses", {
     onDelete: "cascade",
   }),
 }, (table) => [primaryKey({ columns: [table.carreer, table.courses] })]);
-
-export const carrerCoursesRelation = relations(carreerCoursesTable, ({ one }) => ({
-  carreer: one (carrersTable, {
-    fields: [carreerCoursesTable.carreer],
-    references: [carrersTable.id],
-    relationName: "carreer"
-  }),
-  course: one (coursesTable, {
-    fields: [carreerCoursesTable.courses],
-    references: [coursesTable.id],
-    relationName: "course"
-  }),
-}))
 
 
 export type Carreer = InferSelectModel<typeof carrersTable>;

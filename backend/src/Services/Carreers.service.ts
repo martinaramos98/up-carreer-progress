@@ -6,14 +6,10 @@ import {
   carrersTable,
 } from "../db/libsql/schemas/carreers.ts";
 import {
-  courseCorrelativesTable,
-  coursesTable,
-  periodCoursesTable,
   takedCoursesTable,
 } from "../db/libsql/schemas/courses.ts";
 import { and, count, eq, inArray, sql } from "drizzle-orm";
-import { db } from "../db/libsql/db.ts";
-
+import { convertObjectToArrayCourse } from "../utils/convertions.util.ts";
 export class CarreerService {
   // TODO: add dbclient to the constructor
   private dbClient: DBClient;
@@ -27,6 +23,7 @@ export class CarreerService {
           name: carrersTable.name,
           description: carrersTable.description,
           id: carrersTable.id,
+          startDate: carrersTable.startDate,
           totalCourses: count(carreerCoursesTable.courses),
           approved:
             sql`SUM(CASE WHEN ${takedCoursesTable.status} = 'completed' THEN 1 ELSE 0 END)`,
@@ -53,6 +50,7 @@ export class CarreerService {
             name: carrersTable.name,
             description: carrersTable.description,
             id: carrersTable.id,
+            startDate: carrersTable.startDate,
             totalCourses: count(carreerCoursesTable.courses),
             approved:
               sql`SUM(CASE WHEN ${takedCoursesTable.status} = 'completed' THEN 1 ELSE 0 END)`,
@@ -73,16 +71,38 @@ export class CarreerService {
         }
         const carreer = result[0];
         const courses = await tx.query.carreerCoursesTable.findMany({
-          with: {
-            correlatives: true,
-            courses:true;
+          where: eq(carreerCoursesTable.carreer,idCarreer),
+
+          columns: {
+            carreer: false,
+            courses: true,
           },
-          where: (carreerCoursesTable,{eq})=> eq(carreerCoursesTable.carreer,idCarreer)
+          with: {
+            courses: {
+              with: {
+                takedCourses:true,
+                correlatives:{
+                  columns: {
+                    course:false,
+                    correlative:true,
+                  }
+                },
+
+              }
+            }
+          }
+
         })
+        // FIXME: Change type for a builder pattern type
+        // @ts-expect-error type
         carreer.courses = courses;
+        // @ts-expect-error type
+        convertObjectToArrayCourse(carreer)
         const takedCourses = await tx.select().from(takedCoursesTable).where(
           eq(takedCoursesTable.carreer, idCarreer),
         );
+        // FIXME: Change type for a builder pattern type
+        // @ts-expect-error type
         carreer.takedCourses = takedCourses;
         return carreer;
       });
@@ -92,33 +112,7 @@ export class CarreerService {
       throw error;
     }
   }
-  async getCarreerCourses(idCarreer: string) {
-    try {
-      return await this.dbClient
-        .select({
-          id: coursesTable.id,
-          name: coursesTable.name,
-          description: coursesTable.description,
-          periodDuration: periodCoursesTable.description,
-        })
-        .from(carrersTable)
-        .innerJoin(
-          carreerCoursesTable,
-          eq(carrersTable.id, carreerCoursesTable.carreer),
-        )
-        .innerJoin(
-          coursesTable,
-          eq(coursesTable.id, carreerCoursesTable.courses),
-        )
-        .innerJoin(
-          periodCoursesTable,
-          eq(periodCoursesTable.id, coursesTable.id),
-        )
-        .where(eq(carrersTable.id, idCarreer));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  
   async addNewCarrer(carreerData: NewCarreer) {
     try {
       if (carreerData.courses.length === 0) {
@@ -130,6 +124,7 @@ export class CarreerService {
           .values({
             name: carreerData.name,
             description: carreerData.description,
+            startDate: carreerData.startDate,
           })
           .returning({ id: carrersTable.id });
         await tx.insert(carreerCoursesTable).values(
