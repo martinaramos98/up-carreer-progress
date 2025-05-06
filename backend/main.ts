@@ -1,6 +1,8 @@
+import 'npm:newrelic';
 import express from "npm:express";
 import cors from "npm:cors";
 import { createRequire } from "node:module";
+import newrelic from "npm:newrelic";
 const require = createRequire(import.meta.url);
 globalThis.require = require;
 import { loadRoutes } from "./src/utils/loadRoutes.util.ts";
@@ -10,14 +12,17 @@ import { coursesRoutes } from "./src/routes/courses.routes.ts";
 import { CarreerService } from "./src/Services/Carreers.service.ts";
 import { CarreersController } from "./src/Controllers/Carrers.controller.ts";
 import { carreersRoutes } from "./src/routes/carreers.routes.ts";
-
-console.log("starting server...");
+addEventListener("error", (event) => {
+  console.error("Error no controlado:", event.error);
+  newrelic.noticeError(event.error);
+});
 const app = express();
 app.listen(8000);
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173'
 }));
+
 loadRoutes(app, [{
   path: "/courses",
   Service: CoursesService,
