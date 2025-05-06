@@ -34,14 +34,23 @@ const CreateModalContent = (props: Props) => {
         <Input
           isRequired
           label="Course Name"
+          name="name"
           placeholder="Enter course name"
           type="text"
           onChange={onChageInputDataForm}
         />
         <Input
           label="Description"
+          name="description"
           placeholder="Enter course description"
           type="text"
+          onChange={onChageInputDataForm}
+        />
+        <Input
+          label="Year"
+          name="year"
+          placeholder="Enter year when the course should be taken"
+          type="number"
           onChange={onChageInputDataForm}
         />
         <Select label="Period" onSelectionChange={onSelectPeriodHandler}>

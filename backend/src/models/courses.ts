@@ -5,5 +5,6 @@ export interface NewCourse {
   // end_date: Date;
   // FIXME: Ver bien que tipo va en realidad
   period: string;
+  year: number;
   correlativesCourses: string[];
 }

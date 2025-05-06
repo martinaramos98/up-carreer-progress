@@ -17,6 +17,7 @@
     "@types/express": "npm:@types/express@^5.0.1",
     "drizzle-kit": "npm:drizzle-kit@^0.30.6",
     "drizzle-orm": "npm:drizzle-orm@^0.41.0",
-    "express": "npm:express@^5.1.0"
+    "express": "npm:express@^5.1.0",
+    "cors": "npm:cors@^2.8.5"
   }
 }

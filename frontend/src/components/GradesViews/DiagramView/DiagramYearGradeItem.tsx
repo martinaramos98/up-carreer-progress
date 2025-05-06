@@ -12,12 +12,12 @@ const DiagramYearGradeItem = (props: Props) => {
     <>
       <section
         key={props.yearCourses.year}
-        className="flex flex-col gap-2 bg-zinc-900 p-4 rounded-2xl"
+        className="flex flex-col gap-2 dark:bg-zinc-900 bg-zinc-100 p-4 rounded-2xl"
       >
         <header>
           <h2 className="text-xl text-gray-500">
             Ciclo -{" "}
-            {props.gradeStartDate.getFullYear() + props.yearCourses.year}
+            {props.gradeStartDate.getFullYear() + props.yearCourses.year - 1}
           </h2>
         </header>
         <section>

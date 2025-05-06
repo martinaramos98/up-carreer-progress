@@ -2,36 +2,37 @@ import { Input, Textarea } from "@heroui/input";
 import { DatePicker } from "@heroui/date-picker";
 import { Form } from "@heroui/form";
 import { Button } from "@heroui/button";
-import axios from "axios";
 
 import CourseSelector from "@/components/CourseSelector";
 import DefaultLayout from "@/layouts/default";
 import { useNewGradeForm } from "@/hooks/useNewGradeForm.hook";
-import useGradeService from "@/services/GradeService/GradeService.service";
-import { useCourseService } from "@/services/CoursesService/CourseService.service";
+import { IGradeService } from "@/services/GradeService/GradeService.service";
+import { ICourseService } from "@/services/CoursesService/CourseService.service";
 
-const NewGradePage = () => {
-  function handleSubmit() {}
-  const restAgent = axios.create({
-    baseURL: import.meta.env.VITE_API_URL,
-  });
-  const gradeService = useGradeService(restAgent);
-  const courseService = useCourseService(restAgent);
+export interface NewGradePageProps {
+  gradeService: IGradeService;
+  courseService: ICourseService;
+}
+
+const NewGradePage = (props: NewGradePageProps) => {
   const {
     selectedCourses,
     description,
     gradeName,
+    years,
+    isPending,
     handleCourseSelect,
     handleDescriptionChange,
     handleGradeNameChange,
-    // handleStartDateChange,
-  } = useNewGradeForm(gradeService);
+    submitAction,
+    handleYearsChange,
+  } = useNewGradeForm(props.gradeService);
 
   return (
     <DefaultLayout>
       <article className="w-[500px] mx-auto max-w-full">
         <h1 className="text-2xl font-semibold">New Grade</h1>
-        <Form className="items-center" onSubmit={handleSubmit}>
+        <Form action={submitAction} className="items-center">
           <Input
             label="Grade Name"
             type="text"
@@ -43,13 +44,25 @@ const NewGradePage = () => {
             value={description}
             onChange={handleDescriptionChange}
           />
+          <Input
+            label="Years of Study"
+            type="number"
+            value={years.toString()}
+            onChange={handleYearsChange}
+          />
           <DatePicker label="Fecha de Inicio" />
           <CourseSelector
             addCourses={handleCourseSelect}
-            createNewCourse={courseService.createCourse}
+            courseService={props.courseService}
             selectedCourses={selectedCourses}
           />
-          <Button color="primary" type="submit" variant="flat">
+          <Button
+            color="primary"
+            disabled={isPending}
+            isLoading={isPending}
+            type="submit"
+            variant="flat"
+          >
             Create Grade
           </Button>
         </Form>

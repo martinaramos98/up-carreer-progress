@@ -1,8 +1,9 @@
 import { Axios } from "axios";
+import { addToast } from "@heroui/toast";
 
-import { Course, NewCourse } from "@/interfaces/Course";
+import { Course, CourseWithCorrelatives, NewCourse } from "@/interfaces/Course";
 import { IResult } from "@/utils/rest.util";
-
+import { convertCourseToTreeCourse } from "@/utils/recursive.util";
 export interface ICourseService {
   getCourses: () => Promise<IResult<Course[] | unknown>>;
   getCourse: (id: string) => Promise<IResult<Course | unknown>>;
@@ -14,16 +15,29 @@ export interface ICourseService {
 export function useCourseService(restAgent: Axios): ICourseService {
   const getCourses = async (): Promise<IResult<Course[] | unknown>> => {
     try {
-      const { data } = await restAgent.get<Course[]>("/courses");
+      const { data } =
+        await restAgent.get<CourseWithCorrelatives[]>("/courses");
+      const courses: Course[] = [];
+
+      convertCourseToTreeCourse(data, courses);
+      console.log(courses);
 
       return {
-        data,
+        data: courses,
         error: false,
       };
     } catch (error) {
+      addToast({
+        title: "Error getting courses",
+        description: "An error occurred while getting courses.",
+        hideIcon: true,
+        timeout: 5000,
+        color: "danger",
+      });
+
       return {
         error: true,
-        data: error,
+        data: error.data,
       };
     }
   };
@@ -53,6 +67,14 @@ export function useCourseService(restAgent: Axios): ICourseService {
         error: false,
       };
     } catch (error) {
+      addToast({
+        title: "Error creating course",
+        description: "An error occurred while creating the course.",
+        hideIcon: true,
+        timeout: 5000,
+        color: "danger",
+      });
+
       return {
         error: true,
         data: error,
@@ -73,6 +95,14 @@ export function useCourseService(restAgent: Axios): ICourseService {
         error: false,
       };
     } catch (error) {
+      addToast({
+        title: "Error updating course",
+        description: "An error occurred while getting courses.",
+        hideIcon: true,
+        timeout: 5000,
+        color: "danger",
+      });
+
       return {
         error: true,
         data: error,
@@ -88,6 +118,14 @@ export function useCourseService(restAgent: Axios): ICourseService {
         error: false,
       };
     } catch (error) {
+      addToast({
+        title: "Error deleting course",
+        description: "An error occurred while removing course.",
+        hideIcon: true,
+        timeout: 5000,
+        color: "danger",
+      });
+
       return {
         error: true,
         data: error,

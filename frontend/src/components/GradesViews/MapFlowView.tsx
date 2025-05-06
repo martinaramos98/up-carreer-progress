@@ -9,7 +9,7 @@ import {
 
 import { Grade } from "@/interfaces/Grade";
 import CourseNode from "@/components/ReactFlow/CourseNode";
-import { Course } from "@/interfaces/Course";
+import { CourseWithCorrelatives } from "@/interfaces/Course";
 
 type Props = {
   grade: Grade;
@@ -54,6 +54,7 @@ const MapFlowView = (props: Props) => {
         nodeTypes={nodeTypes}
         nodes={nodes}
         nodesDraggable={false}
+        snapToGrid={false}
         onNodesChange={onNodesChange}
       >
         <Background />
@@ -64,16 +65,15 @@ const MapFlowView = (props: Props) => {
 };
 
 export default MapFlowView;
-function calculateEdges(courses: Course[]) {
+function calculateEdges(courses: CourseWithCorrelatives[]) {
   const edges: Edge[] = [];
 
   courses.forEach((course) => {
     course.correlatives.forEach((correlative) => {
       edges.push({
-        id: `${correlative.id}-${course.id}`,
-        source: correlative.id,
+        id: `${correlative}-${course.id}`,
+        source: correlative,
         target: course.id,
-        type: "step",
       });
     });
   });

@@ -4,25 +4,29 @@ import { SharedSelection } from "@heroui/system";
 
 import { Course, NewCourse } from "@/interfaces/Course";
 export function useCreateCourse(
-  courses: Course[],
+  courses: Course[] = [],
   createCourse: (course: NewCourse) => void,
 ) {
   const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    description: Yup.string().required("Description is required"),
     period: Yup.number().required("Period is required"),
+    year: Yup.number().required("Year is required"),
   });
   const [correlativesSelected, setCorrelativesSelected] = useState<Course[]>(
     [],
   );
-
   const [courseData, setCourseData] = useState<NewCourse>({
     name: "",
     description: "",
-    correlatives: [],
-    period: NaN,
+    correlativesCourses: [],
+    period: "",
+    year: NaN,
   });
   const [errors, setErrors] = useState<Yup.InferType<typeof schema>>();
+
+  const courseMap = new Map<Key, Course>(
+    courses.map((course) => [course.id, structuredClone(course)]),
+  );
   const [availableCorrelativesToSelect, setAvailableCorrelativesToSelect] =
     useState<Course[]>([]);
 
@@ -32,19 +36,21 @@ export function useCreateCourse(
 
   function onSelectCorrelative(correlativeId: Key | null) {
     if (correlativeId === null) return;
-    const correlative = availableCorrelativesToSelect.find(
-      (course: Course) => course.id === correlativeId,
-    );
+    const correlative = courseMap.get(correlativeId);
 
     if (!correlative) return;
     setCorrelativesSelected((prevState: Course[]) => {
       const prevAvailableCorrelatives = availableCorrelativesToSelect;
-      const coursesToAdd: Course[] = [];
+      let coursesToAdd: Course[] = [];
 
       recursivelyAddsCorrelatives(
         prevAvailableCorrelatives,
         coursesToAdd,
         correlative,
+      );
+      coursesToAdd = coursesToAdd.filter(
+        (courseToAdd) =>
+          !prevState.some((selected) => selected.id === courseToAdd.id),
       );
       const newState = [...prevState, ...coursesToAdd];
 
@@ -53,6 +59,7 @@ export function useCreateCourse(
       return newState;
     });
   }
+
   function onRemoveCourse(course: Course) {
     setCorrelativesSelected((prevState: Course[]) => {
       const coursesToAddToAvailables: Course[] = [];
@@ -72,8 +79,10 @@ export function useCreateCourse(
     });
   }
   async function onCreateCourseHandler() {
-    if (schema.isValidSync(courseData, { abortEarly: true })) {
-      setErrors(await schema.validate(courseData));
+    if (!schema.isValidSync(courseData, { abortEarly: true })) {
+      const currentErrors = await schema.validate(courseData);
+
+      setErrors(currentErrors);
 
       return;
     }
@@ -81,7 +90,10 @@ export function useCreateCourse(
       name: courseData.name,
       description: courseData.description,
       period: courseData.period,
-      correlatives: correlativesSelected,
+      year: parseInt(courseData.year),
+      correlativesCourses: correlativesSelected.map(
+        (correlative: Course) => correlative.id,
+      ),
     });
   }
   function onChageInputDataForm(event: React.ChangeEvent<HTMLInputElement>) {
@@ -92,7 +104,7 @@ export function useCreateCourse(
   function onSelectPeriodHandler(keys: SharedSelection) {
     setCourseData({
       ...courseData,
-      period: parseInt(keys.anchorKey as string),
+      period: keys.anchorKey as string,
     });
   }
 

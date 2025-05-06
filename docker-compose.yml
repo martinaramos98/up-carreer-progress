@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 services:
   db:
     image: ghcr.io/tursodatabase/libsql-server:latest
@@ -6,19 +6,25 @@ services:
     ports:
       - "8080:8080"
       - "5001:5001"
-    # environment:
-    #   - SQLD_NODE=primary
     volumes:
       - ./data/libsql:/var/lib/sqld
   backend-dev:
-    environment: 
+    environment:
       - NODE_ENV=development
-      - DOCKER=true 
+      - DOCKER=true
       - ENTITY_DB=libsql
       - DATABASE_URL=http://db:8080
     build:
       context: ./backend
       dockerfile: ./Dockerfile.dev
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /app
+          ignore:
+            - node_modules/
+
     ports:
       - 8000:8000
     depends_on:
@@ -27,10 +33,10 @@ services:
       - dev
 
   frontend-dev:
-    environment: 
+    environment:
       - NODE_ENV=development
-      - DOCKER=true 
-      - BACKEND_URL:http://backend:8000
+      - DOCKER=true
+      - VITE_PUBLIC_BACKEND_URL=http://localhost:8000
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.dev
@@ -40,11 +46,17 @@ services:
       - backend-dev
     profiles:
       - dev
-
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /app
+          ignore:
+            - node_modules/
   backend-prod:
-    environment: 
+    environment:
       - NODE_ENV=production
-      - DOCKER=true 
+      - DOCKER=true
       - ENTITY_DB=libsql
       - DATABASE_URL=http://db:8080
     build:
@@ -57,10 +69,10 @@ services:
     profiles:
       - prod
   frontend-prod:
-    environment: 
+    environment:
       - NODE_ENV=production
-      - DOCKER=true 
-      - BACKEND_URL:http://backend-prod:8000
+      - DOCKER=true
+      - VITE_PUBLIC_BACKEND_URL=http://localhost:8000
     build:
       context: ./frontend
       dockerfile: ./Dockerfile.main

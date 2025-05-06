@@ -8,6 +8,7 @@ export const carrersTable = sqliteTable("carrers", {
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   description: text("description"),
+  startDate: text("start_date").notNull(),
 });
 
 export const carreerCoursesTable = sqliteTable("carreer_courses", {
@@ -18,6 +19,7 @@ export const carreerCoursesTable = sqliteTable("carreer_courses", {
     onDelete: "cascade",
   }),
 }, (table) => [primaryKey({ columns: [table.carreer, table.courses] })]);
+
 
 export type Carreer = InferSelectModel<typeof carrersTable>;
 export type CarreerCourses = InferSelectModel<typeof carreerCoursesTable>;

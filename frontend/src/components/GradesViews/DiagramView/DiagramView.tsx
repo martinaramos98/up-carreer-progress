@@ -15,7 +15,7 @@ const DiagramView = (props: Props) => {
       {coursesByYear.map((yearCourses) => (
         <DiagramYearGradeItem
           key={yearCourses.year}
-          gradeStartDate={props.grade.startDate}
+          gradeStartDate={new Date(props.grade.startDate)}
           //@ts-expect-error FIXME: change when TakedCourseGrade is defined in backend
           yearCourses={yearCourses}
         />

@@ -1,4 +1,4 @@
-FROM denoland/deno:latest AS dev
+FROM denoland/deno:latest AS builder
 
 # Create working directory
 WORKDIR /app
@@ -14,7 +14,7 @@ RUN deno cache main.ts
 
 FROM denoland/deno:alpine AS prod
 WORKDIR /app
-COPY --from=dev /app .
+COPY --from=builder /app .
 
 USER deno
 
