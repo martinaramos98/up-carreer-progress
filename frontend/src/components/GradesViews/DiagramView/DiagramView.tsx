@@ -1,20 +1,25 @@
 import DiagramYearGradeItem from "./DiagramYearGradeItem";
 
 import { Grade } from "@/interfaces/Grade";
-import { Course } from "@/interfaces/Course";
+import { Course, GradeCourse } from "@/interfaces/Course";
 
 type Props = {
   grade: Grade;
+  courses: GradeCourse[];
+  onOpenDetailCourse: (courseId: string) => void;
+  onOpenConfirmStart: (course: GradeCourse) => void;
 };
 
 const DiagramView = (props: Props) => {
-  const coursesByYear = groupByYear(props.grade.courses);
+  const coursesByYear = groupByYear(props.courses);
 
   return (
     <article className="flex flex-col gap-4">
       {coursesByYear.map((yearCourses) => (
         <DiagramYearGradeItem
           key={yearCourses.year}
+          onOpenConfirmStart={props.onOpenConfirmStart}
+          onOpenDetailCourse={props.onOpenDetailCourse}
           gradeStartDate={new Date(props.grade.startDate)}
           //@ts-expect-error FIXME: change when TakedCourseGrade is defined in backend
           yearCourses={yearCourses}

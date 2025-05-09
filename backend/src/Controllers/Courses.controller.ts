@@ -66,4 +66,47 @@ export class CoursesController {
       });
     }
   }
+  async createTakedCourse(req: Request, res: Response) {
+    try {
+      const courseId = req.params.courseId;
+      const carreerId = req.params.carreerId;
+      const takedCourseData = req.body;
+      const result = await this.coursesService.startNewCourse(
+        {
+          startDate: takedCourseData.startDate,
+          professor: takedCourseData.professor,
+          gradeId: carreerId,
+          courseId: courseId,
+        }
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(404).json({
+        error: "Cannot create taked course",
+        errorData: error,
+      });
+    }
+  }
+  async updateTakedCourseStatus(req: Request, res: Response) {
+    try {
+      const carreerId = req.params.carreerId;
+      const courseId = req.params.courseId;
+      const takedCourseData = req.body;
+      const result = await this.coursesService.updateStatusTakedCourse(
+      {
+        courseId: courseId,
+        gradeId: carreerId,
+        startDate: takedCourseData.startDate,
+        status: takedCourseData.status,
+      }
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      res.status(404).json({
+        error: "Cannot update taked course",
+        errorData: error,
+      });
+    }
+  }
+
 }

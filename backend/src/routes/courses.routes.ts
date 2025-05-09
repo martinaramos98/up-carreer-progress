@@ -8,5 +8,7 @@ export function coursesRoutes(coursesController: CoursesController) {
   router.post("/", coursesController.addNewCourses.bind(coursesController));
   router.put("/:id", coursesController.updateCourse.bind(coursesController));
   router.delete("/:id", coursesController.deleteCourse.bind(coursesController));
+  router.post("/:courseId/:carreerId/start",coursesController.createTakedCourse.bind(coursesController));
+  router.put("/:courseId/:carreerId/status", coursesController.updateTakedCourseStatus.bind(coursesController));
   return router;
 }

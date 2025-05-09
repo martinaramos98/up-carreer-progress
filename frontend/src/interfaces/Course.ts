@@ -11,7 +11,7 @@ export interface CourseWithCorrelatives extends Omit<Course, "correlatives"> {
 }
 export interface GradeCourse extends Course {
   status: GradeCourseStatus;
-  year: number;
+  startDate: Date;
   takedCourses: TakedCourse[];
 }
 export interface TakedCourse extends Course {
@@ -39,4 +39,7 @@ export type GradeCourseStatus =
   | "not started"
   | "in progress"
   | "completed"
-  | "exam-pending";
+  | "exam pending"
+  | "pending correlatives"
+  | "abandoned"
+  | "reenrolled";

@@ -23,3 +23,4 @@ export const carreerCoursesTable = sqliteTable("carreer_courses", {
 
 export type Carreer = InferSelectModel<typeof carrersTable>;
 export type CarreerCourses = InferSelectModel<typeof carreerCoursesTable>;
+

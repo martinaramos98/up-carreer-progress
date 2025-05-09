@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 
 import { IGradeService } from "@/services/GradeService/GradeService.service";
 import { Grade } from "@/interfaces/Grade";
+import { convertCourseToTreeCourse } from "@/utils/recursive.util";
+import { GradeCourse } from "@/interfaces/Course";
+import { parseToDateArrayProp } from "@/utils/parse.util";
 
 export function useGrade(gradeService: IGradeService, gradeId: string) {
   const [grade, setGrade] = useState<Grade | null>(null);
@@ -16,6 +19,14 @@ export function useGrade(gradeService: IGradeService, gradeId: string) {
       grade.courses = grade.courses.sort((a, b) =>
         a.name.localeCompare(b.name),
       );
+      const coursesTree: GradeCourse[] = [];
+
+      grade.courses.forEach((course) => {
+        parseToDateArrayProp(course.takedCourses, "startDate");
+      });
+      convertCourseToTreeCourse(grade.courses, coursesTree);
+
+      grade.courses = coursesTree;
       setGrade(grade);
       setIsLoading(false);
     } catch (error) {
@@ -24,6 +35,7 @@ export function useGrade(gradeService: IGradeService, gradeId: string) {
       setIsLoading(false);
     }
   }
+
   useEffect(() => {
     getGradeData();
   }, []);

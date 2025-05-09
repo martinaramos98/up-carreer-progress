@@ -29,7 +29,12 @@ function App() {
         path="/grade/new"
       />
       <Route
-        element={<GradePage gradeService={gradeService} />}
+        element={
+          <GradePage
+            courseService={courseService}
+            gradeService={gradeService}
+          />
+        }
         path="/grade/:gradeId"
       />
     </Routes>

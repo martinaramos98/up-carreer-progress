@@ -1,4 +1,4 @@
-import { Course } from "./Course";
+import { GradeCourse } from "./Course";
 
 export interface Grade {
   id: string;
@@ -6,7 +6,7 @@ export interface Grade {
   description: string;
   startDate: Date;
   years: number;
-  courses: Course[];
+  courses: GradeCourse[];
   approved: number;
   totalCourses: number;
 }

@@ -9,16 +9,19 @@ import {
 
 import { Grade } from "@/interfaces/Grade";
 import CourseNode from "@/components/ReactFlow/CourseNode";
-import { CourseWithCorrelatives } from "@/interfaces/Course";
+import { Course, GradeCourse } from "@/interfaces/Course";
 
 type Props = {
   grade: Grade;
+  onOpenDetailCourse: (courseId: string) => void;
+  onOpenConfirmStart: (course: GradeCourse) => void;
+  courses: GradeCourse[] | null;
 };
 
 const MapFlowView = (props: Props) => {
   const yearIdx: Record<number, number> = {};
   const [nodes, setNodes] = useState(
-    props.grade.courses.map((course) => {
+    props.courses?.map((course) => {
       if (yearIdx[course.year] === undefined) {
         yearIdx[course.year] = 0;
       } else {
@@ -29,7 +32,11 @@ const MapFlowView = (props: Props) => {
         id: course.id,
         type: "courseNode",
         position: { x: yearIdx[course.year] * 400, y: (course.year - 1) * 200 },
-        data: { course },
+        data: {
+          course,
+          onOpenDetailCourse: props.onOpenDetailCourse,
+          onOpenConfirmStart: props.onOpenConfirmStart,
+        },
       };
     }),
   );
@@ -65,14 +72,14 @@ const MapFlowView = (props: Props) => {
 };
 
 export default MapFlowView;
-function calculateEdges(courses: CourseWithCorrelatives[]) {
+function calculateEdges(courses: Course[]) {
   const edges: Edge[] = [];
 
   courses.forEach((course) => {
     course.correlatives.forEach((correlative) => {
       edges.push({
-        id: `${correlative}-${course.id}`,
-        source: correlative,
+        id: `${correlative.id}-${course.id}`,
+        source: correlative.id,
         target: course.id,
       });
     });
