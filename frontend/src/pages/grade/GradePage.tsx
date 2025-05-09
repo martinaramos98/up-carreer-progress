@@ -7,9 +7,16 @@ import MapFlowView from "@/components/GradesViews/MapFlowView";
 import DiagramView from "@/components/GradesViews/DiagramView/DiagramView";
 import { useGrade } from "@/hooks/useGrade.hook";
 import { IGradeService } from "@/services/GradeService/GradeService.service";
+import { ICourseService } from "@/services/CoursesService/CourseService.service";
+import { useCourseDetail } from "@/hooks/useCourseDetail.hook";
+import DetailCourseDrawer from "@/components/DetailCourseDrawer/DetailCourseDrawer";
+import { GradeCourse } from "@/interfaces/Course";
+import ModalStartCourse from "@/components/ModalStartCourse/ModalStartCourse";
+import { useGradeCourses } from "@/hooks/useGradeCourses.hook";
 
 export interface GradePageProps {
   gradeService: IGradeService;
+  courseService: ICourseService;
 }
 
 const GradePage = (props: GradePageProps) => {
@@ -17,6 +24,22 @@ const GradePage = (props: GradePageProps) => {
   const { grade, error, isLoading } = useGrade(
     props.gradeService,
     gradeId as string,
+  );
+
+  const {
+    openDrawer,
+    onCloseDrawer,
+    onOpenDrawer,
+    selectedCourse,
+    selectedCourseCanStart,
+    correlativesCoursesStatus,
+    onCloseConfirmStart,
+    onOpenConfirmStart,
+    openConfirmStart,
+  } = useCourseDetail(grade?.courses ?? []);
+  const { gradeCourses, startNewCourse, updateCourseStatus } = useGradeCourses(
+    props.courseService,
+    grade?.courses,
   );
 
   return (
@@ -28,16 +51,43 @@ const GradePage = (props: GradePageProps) => {
         </p>
       </header>
       {grade && (
-        <Tabs
-          classNames={{ base: "w-full justify-end", panel: "w-full h-full" }}
-        >
-          <Tab key={"Map"} title={"Map"}>
-            <MapFlowView grade={grade} />
-          </Tab>
-          <Tab key={"Diagram"} className="w-full h-full" title={"Diagram"}>
-            <DiagramView grade={grade} />
-          </Tab>
-        </Tabs>
+        <>
+          <Tabs
+            classNames={{ base: "w-full justify-end", panel: "w-full h-full" }}
+          >
+            <Tab key={"Map"} title={"Map"}>
+              <MapFlowView
+                courses={gradeCourses as GradeCourse[]}
+                grade={grade}
+                onOpenConfirmStart={onOpenConfirmStart}
+                onOpenDetailCourse={onOpenDrawer}
+              />
+            </Tab>
+            <Tab key={"Diagram"} className="w-full h-full" title={"Diagram"}>
+              <DiagramView
+                courses={gradeCourses as GradeCourse[]}
+                grade={grade}
+                onOpenConfirmStart={onOpenConfirmStart}
+                onOpenDetailCourse={onOpenDrawer}
+              />
+            </Tab>
+          </Tabs>
+          <DetailCourseDrawer
+            correlativesCoursesStatus={correlativesCoursesStatus}
+            course={selectedCourse as GradeCourse}
+            open={openDrawer}
+            selectedCourseCanStart={selectedCourseCanStart}
+            onClose={onCloseDrawer}
+            onOpenConfirmStart={onOpenConfirmStart}
+            onUpdateCourseStatus={updateCourseStatus}
+          />
+          <ModalStartCourse
+            gradeId={grade.id as string}
+            openConfirmStartCourse={openConfirmStart}
+            startNewCourseHandler={startNewCourse}
+            onCloseConfirmStartCourse={onCloseConfirmStart}
+          />
+        </>
       )}
     </DefaultLayout>
   );

@@ -1,9 +1,10 @@
-import { NewCourse } from "../models/courses.ts";
+import { CourseStatus, NewCourse, NewTakedCourse, TakedCourse } from "../models/courses.ts";
 import { DBClient } from "../db/dbController.ts";
 import {
   courseCorrelativesTable,
   coursesTable,
   CourseWithCorrelatives,
+  takedCoursesTable,
 } from "../db/libsql/schemas/courses.ts";
 import { eq, and, inArray } from "drizzle-orm";
 
@@ -170,5 +171,51 @@ export class CoursesService {
     } catch (error) {
       console.error(error);
     }
+  }
+  async startNewCourse(newTakedCourse: NewTakedCourse){
+    try {
+      await this.dbClient.insert(takedCoursesTable).values({
+        startDate: newTakedCourse.startDate,
+        professor: newTakedCourse.professor,
+        carreer: newTakedCourse.gradeId,
+        course: newTakedCourse.courseId,
+        status: "in progress",
+      });
+      return {
+        ...newTakedCourse,
+        status: "in progress",
+      }
+
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  }
+  async updateStatusTakedCourse(takedCourseData: TakedCourse ){
+    try {
+      const result =  await this.dbClient
+        .update(takedCoursesTable)
+        .set({
+          status: takedCourseData.status,
+        })
+        .where(
+          and(
+            eq(takedCoursesTable.course, takedCourseData.courseId),
+            eq(takedCoursesTable.carreer, takedCourseData.gradeId),
+            eq(takedCoursesTable.startDate, takedCourseData.startDate)
+          )
+        )
+        if(result.rowsAffected === 0){
+          throw new Error("Taked Course not found");
+        }
+        
+        return result.toJSON();
+        
+    } catch (error) {
+      console.error(error);
+      throw error;
+
+    }
+  
   }
 }
