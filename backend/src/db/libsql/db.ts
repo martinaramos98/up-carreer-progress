@@ -32,16 +32,24 @@ export type LibSQLClient = typeof db;
 
 if (Deno.env.get("TEST_MODE") === "true" || Deno.env.get("DOCKER") === "true") {
   try {
-    await pushSQLiteSchema(
+    const result = await pushSQLiteSchema(
       {
-        periodCoursesTable,
         coursesTable,
         courseCorrelativesTable,
         carreerCoursesTable,
         carrersTable,
-      },
+        periodCoursesTable,
+        takedCoursesTable,
+        ...carreerRelations({
+          coursesTable,
+          carreerCoursesTable,
+          carrersTable,
+          courseCorrelativesTable,
+          takedCoursesTable,
+        })},
       db
     );
+    await result.apply()
   } catch (error) {
     console.error("Error pushing schema to LibSQL:", error);
   }
