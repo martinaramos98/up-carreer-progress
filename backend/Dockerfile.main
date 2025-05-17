@@ -18,5 +18,5 @@ COPY --from=builder /app .
 
 USER deno
 
-# Run the app
+# node -r newrelic YOUR_MAIN_FILENAME.js
 CMD ["deno", "run", "--allow-net","--allow-env","--allow-sys","--allow-ffi" , "main.ts"]
