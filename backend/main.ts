@@ -14,12 +14,15 @@ import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 
 Sentry.init({
   dsn: Deno.env.get("SENTRY_DSN"),
+  tracesSampleRate: 1.0,
+  tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"]
 });
 const app = express();
 app.listen(8000);
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173'
+  
 }));
 
 loadRoutes(app, [{
