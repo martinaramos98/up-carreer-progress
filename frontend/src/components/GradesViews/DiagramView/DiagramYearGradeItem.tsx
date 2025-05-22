@@ -5,6 +5,8 @@ import { GradeCourse } from "@/interfaces/Course";
 type Props = {
   gradeStartDate: Date;
   yearCourses: { year: number; courses: GradeCourse[] };
+  onOpenConfirmStart: (course: GradeCourse) => void;
+  onOpenDetailCourse: (courseId: string) => void;
 };
 
 const DiagramYearGradeItem = (props: Props) => {
@@ -23,7 +25,12 @@ const DiagramYearGradeItem = (props: Props) => {
         <section>
           <div className="flex flex-row gap-2">
             {props.yearCourses.courses.map((course) => (
-              <DiagramCourseItem key={course.id} course={course} />
+              <DiagramCourseItem
+                key={course.id}
+                course={course}
+                onOpenConfirmStart={props.onOpenConfirmStart}
+                onOpenDetailCourse={props.onOpenDetailCourse}
+              />
             ))}
           </div>
         </section>

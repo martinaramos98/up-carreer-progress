@@ -14,7 +14,9 @@ const GradeItem: React.FC<GradeItemProps> = ({ grade }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setCurrentProgress(grade.approved / (grade.totalCourses ?? Infinity));
+      setCurrentProgress(
+        (grade.approved / (grade.totalCourses ?? Infinity)) * 100,
+      );
     }, 100);
   }, []);
   function navigateToGradeHandler() {

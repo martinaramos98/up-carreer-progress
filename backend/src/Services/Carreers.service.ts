@@ -1,10 +1,11 @@
-import { NewCarreer } from "../models/carreers.ts";
+import { CarreerWithCourses, NewCarreer } from "../models/carreers.ts";
 import type { DBClient } from "../db/dbController.ts";
 import {
   Carreer,
   carreerCoursesTable,
   carrersTable,
 } from "../db/libsql/schemas/carreers.ts";
+import {CarreerCourse} from "../models/courses.ts"
 import {
   takedCoursesTable,
 } from "../db/libsql/schemas/courses.ts";
@@ -18,15 +19,13 @@ export class CarreerService {
   }
   async getCarreers() {
     try {
-      return await this.dbClient
+      const result = await this.dbClient
         .select({
           name: carrersTable.name,
           description: carrersTable.description,
           id: carrersTable.id,
           startDate: carrersTable.startDate,
-          totalCourses: count(carreerCoursesTable.courses),
-          approved:
-            sql`SUM(CASE WHEN ${takedCoursesTable.status} = 'completed' THEN 1 ELSE 0 END)`,
+         
         })
         .from(carrersTable)
         .leftJoin(
@@ -38,11 +37,19 @@ export class CarreerService {
           eq(carreerCoursesTable.carreer, carrersTable.id),
         )
         .groupBy(sql`${carrersTable.id}`);
+        await Promise.all(
+          result.map(async (carreer) => {
+            carreer.totalCourses = await this.getTotalCourses(carreer.id);
+            carreer.approved = await this.getTotalApprovedCourses(carreer.id);
+
+          })
+        );
+        return result;
     } catch (error) {
       console.error(error);
     }
   }
-  async getCarreerData(idCarreer: string): Promise<Carreer | undefined> {
+  async getCarreerData(idCarreer: string): Promise<CarreerWithCourses | undefined> {
     try {
       const carreerData = await this.dbClient.transaction(async (tx) => {
         const result = await tx
@@ -51,9 +58,9 @@ export class CarreerService {
             description: carrersTable.description,
             id: carrersTable.id,
             startDate: carrersTable.startDate,
-            totalCourses: count(carreerCoursesTable.courses),
-            approved:
-              sql`SUM(CASE WHEN ${takedCoursesTable.status} = 'completed' THEN 1 ELSE 0 END)`,
+            // totalCourses: count(carreerCoursesTable.courses),
+            // approved:
+              // sql`SUM(CASE WHEN ${takedCoursesTable.status} = 'completed' THEN 1 ELSE 0 END)`,
           })
           .from(carrersTable)
           .leftJoin(
@@ -69,7 +76,10 @@ export class CarreerService {
         if (result.length === 0) {
           throw new Error("Carreer not found");
         }
-        const carreer = result[0];
+        
+        const carreer = result[0] as CarreerWithCourses;
+        carreer.totalCourses = await this.getTotalCourses(idCarreer);
+        carreer.approved = await this.getTotalApprovedCourses(idCarreer);
         const courses = await tx.query.carreerCoursesTable.findMany({
           where: eq(carreerCoursesTable.carreer,idCarreer),
 
@@ -95,15 +105,11 @@ export class CarreerService {
         })
         // FIXME: Change type for a builder pattern type
         // @ts-expect-error type
-        carreer.courses = courses;
+        carreer.courses = courses as CarreerCourse[];
         // @ts-expect-error type
         convertObjectToArrayCourse(carreer)
-        const takedCourses = await tx.select().from(takedCoursesTable).where(
-          eq(takedCoursesTable.carreer, idCarreer),
-        );
-        // FIXME: Change type for a builder pattern type
-        // @ts-expect-error type
-        carreer.takedCourses = takedCourses;
+        this.buildCourseStatus(carreer)
+
         return carreer;
       });
       return carreerData;
@@ -203,4 +209,40 @@ export class CarreerService {
   }
 
   async loadCarreerWithCSV(file: File) {}
+  private buildCourseStatus(carreer: CarreerWithCourses) {
+    const coursesMap = new Map(carreer.courses.map((course: CarreerCourse) => [course.id, course]));  
+    carreer.courses.forEach((course:CarreerCourse) => {
+      course.status = course.takedCourses?.at(-1)?.status ?? "not started" 
+      course.correlatives.forEach((correlative:string) => {
+        const correlativesCoursesStatus = coursesMap.get(correlative)?.takedCourses?.at(-1)?.status ?? "not started" 
+        if (correlativesCoursesStatus !== "completed" && correlativesCoursesStatus !== "exam pending") {
+          course.status = "pending correlatives"
+        }
+      }
+        
+      )
+    })
+  }
+  private async  getTotalCourses(carreerId: string) {
+    try {
+      const qr = await this.dbClient.select({
+        totalCourses: count(carreerCoursesTable.courses),
+      }).from(carreerCoursesTable).where(eq(carreerCoursesTable.carreer,carreerId))
+      return qr[0].totalCourses;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Error getting total courses");    
+    }
+    }
+    private async  getTotalApprovedCourses(carreerId: string) {
+      try {
+        const qr = await this.dbClient.select({
+          approved: count(takedCoursesTable.status),
+        }).from(takedCoursesTable).where(and(eq(takedCoursesTable.carreer,carreerId), eq(takedCoursesTable.status,"completed")))
+        return qr[0].approved;
+      } catch (error) {
+        console.error(error);
+        throw new Error("Error getting approved courses");    
+      }
+      }
 }
