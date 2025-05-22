@@ -14,10 +14,7 @@ export default function useGradeService(restAgent: Axios): IGradeService {
     grade: GradeCreate,
   ): Promise<IResult<Grade | unknown>> => {
     try {
-      const { data } = await restAgent.post<Grade>("/grades", {
-        ...grade,
-        startDate: grade.startDate.toISOString(),
-      });
+      const { data } = await restAgent.post<Grade>("/grades", grade);
 
       return {
         data,

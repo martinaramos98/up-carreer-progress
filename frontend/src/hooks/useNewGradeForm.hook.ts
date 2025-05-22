@@ -1,12 +1,15 @@
 import { useActionState, useState } from "react";
 import { addToast } from "@heroui/toast";
+import { parseAbsoluteToLocal, ZonedDateTime } from "@internationalized/date";
 
 import { Course } from "@/interfaces/Course";
 import { IGradeService } from "@/services/GradeService/GradeService.service";
 export function useNewGradeForm(gradeService: IGradeService) {
   const [gradeName, setGradeName] = useState("");
   const [description, setDescription] = useState("");
-  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<ZonedDateTime>(
+    parseAbsoluteToLocal(new Date().toISOString()),
+  );
   const [years, setYears] = useState<number>(NaN);
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [result, submitAction, isPending] = useActionState(
@@ -20,7 +23,7 @@ export function useNewGradeForm(gradeService: IGradeService) {
   function handleDescriptionChange(event: React.ChangeEvent<HTMLInputElement>) {
     setDescription(event.target.value);
   }
-  function handleStartDateChange(date: Date | null) {
+  function handleStartDateChange(date: ZonedDateTime) {
     setStartDate(date);
   }
   function handleYearsChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -39,7 +42,7 @@ export function useNewGradeForm(gradeService: IGradeService) {
       const result = await gradeService.createGrade({
         name: gradeName,
         description,
-        startDate: (startDate as Date).toISOString(),
+        startDate: startDate.toAbsoluteString(),
         years: years,
         courses: selectedCourses.map((course) => course.id),
       });

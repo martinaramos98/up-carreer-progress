@@ -24,6 +24,8 @@ const NewGradePage = (props: NewGradePageProps) => {
     handleCourseSelect,
     handleDescriptionChange,
     handleGradeNameChange,
+    handleStartDateChange,
+    startDate,
     submitAction,
     handleYearsChange,
   } = useNewGradeForm(props.gradeService);
@@ -50,7 +52,11 @@ const NewGradePage = (props: NewGradePageProps) => {
             value={years.toString()}
             onChange={handleYearsChange}
           />
-          <DatePicker label="Fecha de Inicio" />
+          <DatePicker
+            label="Fecha de Inicio"
+            value={startDate}
+            onChange={handleStartDateChange}
+          />
           <CourseSelector
             addCourses={handleCourseSelect}
             courseService={props.courseService}

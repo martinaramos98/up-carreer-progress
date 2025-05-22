@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@heroui/autocomplete": "^2.3.17",
+    "@heroui/autocomplete": "^2.3.20",
     "@heroui/button": "^2.2.16",
     "@heroui/card": "^2.2.16",
     "@heroui/checkbox": "^2.3.15",
