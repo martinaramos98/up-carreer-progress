@@ -6,6 +6,7 @@ import { periodCoursesTable } from "./schemas/courses.ts";
 import { courseCorrelativesTable,coursesTable, takedCoursesTable } from "./schemas/courses.ts";
 import { carreerCoursesTable, carrersTable } from "./schemas/carreers.ts";
 import { carreerRelations } from "./schemas/relations.ts";
+import { insertPeriod, insertTestDataCourses } from "../../../tests/helpers/SqldHelper.ts";
 const client = createClient({
   url: dbModeByEnv(),
 });
@@ -50,6 +51,11 @@ if (Deno.env.get("TEST_MODE") === "true" || Deno.env.get("DOCKER") === "true") {
       db
     );
     await result.apply()
+    if(Deno.env.get("TEST_MODE") === "true"){
+      await insertPeriod(db);
+      await insertTestDataCourses(db);
+       console.log("READY_FOR_TEST");
+    } 
   } catch (error) {
     console.error("Error pushing schema to LibSQL:", error);
   }

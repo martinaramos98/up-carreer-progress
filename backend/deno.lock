@@ -4,6 +4,7 @@
     "jsr:@std/assert@^1.0.12": "1.0.12",
     "jsr:@std/internal@^1.0.6": "1.0.6",
     "npm:@libsql/client@~0.15.3": "0.15.3",
+    "npm:@libsql/client@~0.15.7": "0.15.7",
     "npm:@playwright/test@^1.51.1": "1.51.1",
     "npm:@sentry/deno@^9.15.0": "9.15.0",
     "npm:@types/express@^5.0.1": "5.0.1",
@@ -257,10 +258,20 @@
     "@libsql/client@0.15.3": {
       "integrity": "sha512-JtJdpfwJFg059ZeFXs7uf7PeRczQcw7kD8rV2qAeKlWvc+oBSZKT4bLajo3n2o/HrLp9IvpKHee5xm9fDLzu+g==",
       "dependencies": [
-        "@libsql/core",
+        "@libsql/core@0.15.3",
         "@libsql/hrana-client",
         "js-base64",
-        "libsql",
+        "libsql@0.5.5",
+        "promise-limit"
+      ]
+    },
+    "@libsql/client@0.15.7": {
+      "integrity": "sha512-2rKekOBINDKXGwB0I5qeTDuom2944hEkWkjN8O41j95/HRKP+3sk/fq6/PoPJSuwY3pgWAS8vyby+FgOyPnIVQ==",
+      "dependencies": [
+        "@libsql/core@0.15.7",
+        "@libsql/hrana-client",
+        "js-base64",
+        "libsql@0.5.11",
         "promise-limit"
       ]
     },
@@ -270,8 +281,20 @@
         "js-base64"
       ]
     },
+    "@libsql/core@0.15.7": {
+      "integrity": "sha512-hW1++8iKAEnb7Y3EZ2zXRR+1K0MKdRT7SLaNgFkfwz6CmiIBY3sYN7VSftNS7IR6xKRvFBpoz10CC63NoFGkaQ==",
+      "dependencies": [
+        "js-base64"
+      ]
+    },
+    "@libsql/darwin-arm64@0.5.11": {
+      "integrity": "sha512-Av4+H8VypNZdbRbDKu5ogoCBHOdYh2Vx6iO7+0SACjcgnpqjnGL59lJUuX3fmV48VI6al1xORYJVApo//B5iqA=="
+    },
     "@libsql/darwin-arm64@0.5.5": {
       "integrity": "sha512-PEWL5G+VYZjJSE1ljqJccc1L37l6FR/SyGpgFAs96vqevTBUFQ20p5ytvHhy4PmA9TuB+6GcoFq/UOjYcaw2Sg=="
+    },
+    "@libsql/darwin-x64@0.5.11": {
+      "integrity": "sha512-+BXozvOKhwbye16itymY2YXeHOcIeZGORdJK2prfXA7Q2HR4/dRdUirR1o/koxxxG616uiWlAVj5WJ0j2IWkQA=="
     },
     "@libsql/darwin-x64@0.5.5": {
       "integrity": "sha512-cw298nZ/fn3KXuP/nC4gxkboBvw+QAB8yR+UrlZyoOGa3lk9bJNRbkJKj/Kw8s4nbPF+wx6mDWF1rTN8ey7mnQ=="
@@ -295,17 +318,38 @@
         "ws"
       ]
     },
+    "@libsql/linux-arm-gnueabihf@0.5.11": {
+      "integrity": "sha512-znsVKbKgOerCNkIY0HjtvkioVGLskmGXZodZn3TMDRTmn1PIUt7/dnxU5moKMdKa1hKDSOC52dqF77nAdkn4UA=="
+    },
+    "@libsql/linux-arm-musleabihf@0.5.11": {
+      "integrity": "sha512-l4gJY6AvhQ4fUJRpjph3AW6pbiAUcVxJUH0oM5Pf/GnA9acpaDgLtle2hWMz16BSncg/Jl2jVpaJuyJsJ9E7YA=="
+    },
+    "@libsql/linux-arm64-gnu@0.5.11": {
+      "integrity": "sha512-axXEenVUnSKR25g0iqL/OH4z4qrPBNwdBhjTWZr613L9tnboDPAioP1kVEy77nN8C8CL/dyXh5X4vKuIwHrQpQ=="
+    },
     "@libsql/linux-arm64-gnu@0.5.5": {
       "integrity": "sha512-OCT6u5m3X8uuSaJtvrrJ1k4EjZADUs4whRSelKKgGLho0H47G86YkhbqXbmMN9GEREpUcgVkA0HfxQzrglQTjQ=="
+    },
+    "@libsql/linux-arm64-musl@0.5.11": {
+      "integrity": "sha512-Pzz9dm2D78PQpy3pYKbvzBBOwdjg9c3yoQSu5QQQCGL4J5e1bZpa/p6Z3BoYBlvmdo1V36ljS6N4hRir/rnCxg=="
     },
     "@libsql/linux-arm64-musl@0.5.5": {
       "integrity": "sha512-tyRvTLuPkZvdHhxKIxJ+f6WPZEO47xHQUnXRPOcxVa66FCDRPn2fbrCWhXGhWFVSNEuYx54U5pd3pjOvZNeJoQ=="
     },
+    "@libsql/linux-x64-gnu@0.5.11": {
+      "integrity": "sha512-DxOU0MqG7soKZFVzOo7Zot5qDajZjjOgjf/sOjeJf/aeRBr3KkKiwgWKnmjDhuhitahqc8Nu2D92/dsAuDHJsA=="
+    },
     "@libsql/linux-x64-gnu@0.5.5": {
       "integrity": "sha512-ZJVLNPlF+g/7yINmE89ldi5RmQy7YTqnJzmKyP2CDjdJ7QgslESbnMSvhNfPJ1S7fsRQw2SUYp6Is5hw9FP8Hg=="
     },
+    "@libsql/linux-x64-musl@0.5.11": {
+      "integrity": "sha512-uRou4r+PiDA616t2USnsjbot88ennTrwKqhVUY7S6LTPI3RiKizZg6YESCwhzofPtk8Ualp/hMQGTGSoW9DUKw=="
+    },
     "@libsql/linux-x64-musl@0.5.5": {
       "integrity": "sha512-SYefkMu7vCBFAjNTysT9a8BJgVsCp8Jl7ehfkZLLYnbXz04qCdKK5Q3Z94AXPvClGXWKsha7AOR8zofQYhbGdg=="
+    },
+    "@libsql/win32-x64-msvc@0.5.11": {
+      "integrity": "sha512-NES0P2pyx5XjveTYotTG03eoJwx0haJBYWXfqmcPLmbQ5u03Qmd7rxhLfWDdIRj4PrdhVProwdB0FA82ryLcKQ=="
     },
     "@libsql/win32-x64-msvc@0.5.5": {
       "integrity": "sha512-w6G7aONV7gVPAtAs7jUxMJBHYURyYx0FNNG+G/oPgGxTrgYJ7cPW1gOp+7SjzPUBCJJrKVf7VJkRjmJLr6RORw=="
@@ -506,7 +550,7 @@
     "drizzle-orm@0.41.0_@libsql+client@0.15.3": {
       "integrity": "sha512-7A4ZxhHk9gdlXmTdPj/lREtP+3u8KvZ4yEN6MYVxBzZGex5Wtdc+CWSbu7btgF6TB0N+MNPrvW7RKBbxJchs/Q==",
       "dependencies": [
-        "@libsql/client"
+        "@libsql/client@0.15.3"
       ]
     },
     "dunder-proto@1.0.1": {
@@ -793,16 +837,32 @@
     "js-base64@3.7.7": {
       "integrity": "sha512-7rCnleh0z2CkXhH67J8K1Ytz0b2Y+yxTPL+/KOJoa20hfnVQ/3/T6W/KflYI4bRHRagNeXeU2bkNGI3v1oS/lw=="
     },
+    "libsql@0.5.11": {
+      "integrity": "sha512-P2xY1nL2Jl7oM75LcguAEYqouVcevWhLWT8RU/p9ldaqQx5s/chF9t5ZFXPWP0x9myQQ4SguRqPO+FqdnCzKQg==",
+      "dependencies": [
+        "@libsql/darwin-arm64@0.5.11",
+        "@libsql/darwin-x64@0.5.11",
+        "@libsql/linux-arm-gnueabihf",
+        "@libsql/linux-arm-musleabihf",
+        "@libsql/linux-arm64-gnu@0.5.11",
+        "@libsql/linux-arm64-musl@0.5.11",
+        "@libsql/linux-x64-gnu@0.5.11",
+        "@libsql/linux-x64-musl@0.5.11",
+        "@libsql/win32-x64-msvc@0.5.11",
+        "@neon-rs/load",
+        "detect-libc"
+      ]
+    },
     "libsql@0.5.5": {
       "integrity": "sha512-TEFJ1X6lP0yDZIUYznlvQnzdajQ7TEPAAw1C9AvFiDp4OSBiH//yj3VHbYQSFkeHtFvL+6O4waOWQM1LA5Qggw==",
       "dependencies": [
-        "@libsql/darwin-arm64",
-        "@libsql/darwin-x64",
-        "@libsql/linux-arm64-gnu",
-        "@libsql/linux-arm64-musl",
-        "@libsql/linux-x64-gnu",
-        "@libsql/linux-x64-musl",
-        "@libsql/win32-x64-msvc",
+        "@libsql/darwin-arm64@0.5.5",
+        "@libsql/darwin-x64@0.5.5",
+        "@libsql/linux-arm64-gnu@0.5.5",
+        "@libsql/linux-arm64-musl@0.5.5",
+        "@libsql/linux-x64-gnu@0.5.5",
+        "@libsql/linux-x64-musl@0.5.5",
+        "@libsql/win32-x64-msvc@0.5.5",
         "@neon-rs/load",
         "detect-libc"
       ]
@@ -1048,7 +1108,7 @@
   "workspace": {
     "dependencies": [
       "jsr:@std/assert@^1.0.12",
-      "npm:@libsql/client@~0.15.3",
+      "npm:@libsql/client@~0.15.7",
       "npm:@types/express@^5.0.1",
       "npm:cors@^2.8.5",
       "npm:drizzle-kit@~0.30.6",
@@ -1057,7 +1117,7 @@
     ],
     "packageJson": {
       "dependencies": [
-        "npm:@libsql/client@~0.15.3",
+        "npm:@libsql/client@~0.15.7",
         "npm:@playwright/test@^1.51.1",
         "npm:@sentry/deno@^9.15.0",
         "npm:@types/express@^5.0.1",
