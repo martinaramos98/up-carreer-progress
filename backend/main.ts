@@ -14,7 +14,7 @@ import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 
 console.log("[DEBUG] SENTRY_DSN", Deno.env.get("SENTRY_DSN"));
 Sentry.init({
-  dsn: Deno.env.get("SENTRY_DSN"),
+  dsn: Deno.env.get("https://3176629379b8c7f11abe37f617522bc6@o4509277619159040.ingest.us.sentry.io/4509277620273152"),
   tracesSampleRate: 1.0,
   tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"],
   sendDefaultPii: true,
@@ -50,4 +50,8 @@ if(Deno.env.get("TEST_MODE") === "true"){
     setDBMockData()
   })
 }
+
+app.get("/test_error", (_req, res) => {
+  throw new Error("Test error for sentry");
+})
 console.log(`Server is running on http://localhost:8000`);
