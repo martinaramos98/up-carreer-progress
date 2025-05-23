@@ -8,6 +8,7 @@ import { carreerCoursesTable, carrersTable } from "./schemas/carreers.ts";
 import { carreerRelations } from "./schemas/relations.ts";
 const client = createClient({
   url: dbModeByEnv(),
+  authToken: Deno.env.get("DATABASE_AUTH_TOKEN"),
 });
 
 export const db = drizzle(client, {
