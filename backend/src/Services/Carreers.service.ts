@@ -1,3 +1,4 @@
+import * as Sentry from "npm:@sentry/deno";
 import { CarreerWithCourses, NewCarreer } from "../models/carreers.ts";
 import type { DBClient } from "../db/dbController.ts";
 import {
@@ -51,7 +52,19 @@ export class CarreerService {
   }
   async getCarreerData(idCarreer: string): Promise<CarreerWithCourses | undefined> {
     try {
-      const carreerData = await this.dbClient.transaction(async (tx) => {
+      const timer = performance.now();
+      let carreer: CarreerWithCourses | undefined = undefined;
+      await Sentry.startSpan({
+        name: "DB Carreer Grade",
+        op: "db.metrics",
+        attributes: {
+          "db.query": "Select",
+          "db.query.start": timer,
+
+        },
+      },
+      async (span)=>{
+      await this.dbClient.transaction(async (tx) => {
         const result = await tx
           .select({
             name: carrersTable.name,
@@ -76,8 +89,8 @@ export class CarreerService {
         if (result.length === 0) {
           throw new Error("Carreer not found");
         }
-        
-        const carreer = result[0] as CarreerWithCourses;
+        span.setAttribute("db.query.result", result.length);
+        carreer = result[0] as CarreerWithCourses;
         carreer.totalCourses = await this.getTotalCourses(idCarreer);
         carreer.approved = await this.getTotalApprovedCourses(idCarreer);
         const courses = await tx.query.carreerCoursesTable.findMany({
@@ -101,7 +114,6 @@ export class CarreerService {
               }
             }
           }
-
         })
         // FIXME: Change type for a builder pattern type
         // @ts-expect-error type
@@ -109,10 +121,12 @@ export class CarreerService {
         // @ts-expect-error type
         convertObjectToArrayCourse(carreer)
         this.buildCourseStatus(carreer)
-
-        return carreer;
       });
-      return carreerData;
+      span.setAttribute("db.query.end", performance.now());
+      }
+
+    )
+      return carreer as unknown as CarreerWithCourses;
     } catch (error) {
       console.error(error);
       throw error;

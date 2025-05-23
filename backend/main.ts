@@ -1,3 +1,4 @@
+import * as Sentry from "npm:@sentry/deno";
 import express from "npm:express";
 import cors from "npm:cors";
 import { createRequire } from "node:module";
@@ -11,13 +12,19 @@ import { CarreerService } from "./src/Services/Carreers.service.ts";
 import { CarreersController } from "./src/Controllers/Carrers.controller.ts";
 import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 
-console.log("starting server...");
+Sentry.init({
+  dsn: Deno.env.get("SENTRY_DSN"),
+  tracesSampleRate: 1.0,
+  tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"]
+});
 const app = express();
 app.listen(8000);
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:5173'
+  
 }));
+
 loadRoutes(app, [{
   path: "/courses",
   Service: CoursesService,
@@ -42,4 +49,3 @@ if(Deno.env.get("TEST_MODE") === "true"){
   })
 }
 console.log(`Server is running on http://localhost:8000`);
-
