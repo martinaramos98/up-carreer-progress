@@ -15,7 +15,8 @@ import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 Sentry.init({
   dsn: Deno.env.get("SENTRY_DSN"),
   tracesSampleRate: 1.0,
-  tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"]
+  tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"],
+  sendDefaultPii: true,
 });
 const app = express();
 app.listen(8000);
