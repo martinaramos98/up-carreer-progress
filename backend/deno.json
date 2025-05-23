@@ -2,7 +2,7 @@
   "tasks": {
     "dev": "deno run --env --allow-all --watch main.ts",
     "start": "deno run --allow-all main.ts",
-    "test": "deno run --allow-run execute_tests.ts",
+    "test": "deno run --allow-all execute_tests.ts",
     "test:ui": "deno run  --allow-run execute_tests.ts --ui",
     "test:report": "deno run --allow-all --node-modules-dir=auto npm:@playwright/test show-report",
 
@@ -12,7 +12,7 @@
     "db:studio": "deno run --node-modules-dir --allow-env --allow-read --allow-sys --allow-write --allow-run npm:drizzle-kit studio"
   },
   "imports": {
-    "@libsql/client": "npm:@libsql/client@^0.15.3",
+    "@libsql/client": "npm:@libsql/client@^0.15.7",
     "@std/assert": "jsr:@std/assert@^1.0.12",
     "@types/express": "npm:@types/express@^5.0.1",
     "drizzle-kit": "npm:drizzle-kit@^0.30.6",
