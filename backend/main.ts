@@ -12,6 +12,7 @@ import { CarreerService } from "./src/Services/Carreers.service.ts";
 import { CarreersController } from "./src/Controllers/Carrers.controller.ts";
 import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 
+console.log("[DEBUG] SENTRY_DSN", Deno.env.get("SENTRY_DSN"));
 Sentry.init({
   dsn: Deno.env.get("SENTRY_DSN"),
   tracesSampleRate: 1.0,

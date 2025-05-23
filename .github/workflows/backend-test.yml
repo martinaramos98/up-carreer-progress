@@ -3,16 +3,12 @@ on:
   push:
     branches: 
     - main
-    - qa
-    - dev
     paths:
       - "backend/**"
       - ".github/workflows/backend-*"
   pull_request:
     branches: 
     - main
-    - qa
-    - dev
     paths:
       - "backend/**"
       - ".github/workflows/*"
