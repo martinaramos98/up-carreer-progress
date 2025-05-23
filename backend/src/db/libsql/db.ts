@@ -6,7 +6,6 @@ import { periodCoursesTable } from "./schemas/courses.ts";
 import { courseCorrelativesTable,coursesTable, takedCoursesTable } from "./schemas/courses.ts";
 import { carreerCoursesTable, carrersTable } from "./schemas/carreers.ts";
 import { carreerRelations } from "./schemas/relations.ts";
-import { insertPeriod, insertTestDataCourses } from "../../../tests/helpers/SqldHelper.ts";
 const client = createClient({
   url: dbModeByEnv(),
 });
@@ -33,6 +32,7 @@ export type LibSQLClient = typeof db;
 
 if (Deno.env.get("TEST_MODE") === "true" || Deno.env.get("DOCKER") === "true") {
   try {
+    const helpers = await import("../../../tests/helpers/SqldHelper.ts");
     const result = await pushSQLiteSchema(
       {
         coursesTable,
@@ -52,8 +52,8 @@ if (Deno.env.get("TEST_MODE") === "true" || Deno.env.get("DOCKER") === "true") {
     );
     await result.apply()
     if(Deno.env.get("TEST_MODE") === "true"){
-      await insertPeriod(db);
-      await insertTestDataCourses(db);
+      await helpers.insertPeriod(db);
+      await helpers.insertTestDataCourses(db);
        console.log("READY_FOR_TEST");
     } 
   } catch (error) {
