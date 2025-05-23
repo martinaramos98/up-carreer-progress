@@ -14,7 +14,7 @@ import { carreersRoutes } from "./src/routes/carreers.routes.ts";
 
 console.log("[DEBUG] SENTRY_DSN", Deno.env.get("SENTRY_DSN"));
 Sentry.init({
-  dsn: Deno.env.get("https://docs.github.com/en/actions/writing-workflows/choosing-when-your-workflow-runs/using-conditions-to-control-job-execution"),
+  dsn: Deno.env.get("https://3176629379b8c7f11abe37f617522bc6@o4509277619159040.ingest.us.sentry.io/4509277620273152"),
   tracesSampleRate: 1.0,
   tracePropagationTargets: ["https://up-carreer-progress-vtr7.onrender.com"],
   sendDefaultPii: true,
