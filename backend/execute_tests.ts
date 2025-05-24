@@ -1,7 +1,8 @@
+Deno.writeFileSync("db_test.db",new Uint8Array());
 const server = new Deno.Command("deno", {
   args: ["run", "start"],
   env: {
-    DATABASE_URL: ":memory:",
+    DATABASE_URL: "file:./db_test.db",
     TEST_MODE: "true",
     ENTITY_DB: "libsql",
   },
@@ -10,7 +11,8 @@ const server = new Deno.Command("deno", {
 });
 console.log("Starting server...");
 const sp = server.spawn();
-const stream = sp.stdout.pipeThrough(new TextDecoderStream()).pipeThrough(
+const [stream1, stream2] = sp.stdout.tee();
+const stream = stream1.pipeThrough(new TextDecoderStream()).pipeThrough(
   new TransformStream({
     transform(chunk, controller) {
       chunk.split("\n").forEach((line) => controller.enqueue(line));
@@ -28,7 +30,12 @@ while (!readyForTest) {
     readyForTest = true;
   }
 }
+
 reader.releaseLock();
+stream2.pipeTo(Deno.stdout.writable, {
+  preventClose: true,
+});
+
 if(!readyForTest){
   console.error("Server not ready for testing");
   sp.kill();
@@ -48,4 +55,5 @@ if (code === 0) {
   console.log("Testing complete");
 }
 sp.kill();
+Deno.removeSync("db_test.db");
 Deno.exit(code);

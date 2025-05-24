@@ -46,8 +46,9 @@ export class CoursesService {
   }
   async addNewCourses(coursesData: NewCourse | NewCourse[]) {
     try {
+      // return await this.dbClient.insert(coursesTable).values(coursesData)
       if (Array.isArray(coursesData)) {
-        await this.dbClient.transaction(async (tx) => {
+        return await this.dbClient.transaction(async (tx) => {
         const res = await tx
           .insert(coursesTable)
           .values(
@@ -70,7 +71,7 @@ export class CoursesService {
         })
         return await this.getCourses();
       } else {
-        await this.dbClient.transaction(async (tx) => {
+        return await this.dbClient.transaction(async (tx) => {
           
         const res = await tx 
           .insert(coursesTable)
