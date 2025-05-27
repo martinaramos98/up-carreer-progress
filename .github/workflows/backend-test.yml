@@ -1,17 +1,16 @@
 name: Tests Backend
 on:
   push:
+    paths-ignore: 
+    - "frontend/**"
     branches: 
     - main
-    paths:
-      - "backend/**"
-      - ".github/workflows/backend-*"
   pull_request:
+    paths-ignore: 
+    - "frontend/**"
+    - "docker-compose.yml"
     branches: 
     - main
-    paths:
-      - "backend/**"
-      - ".github/workflows/*"
 jobs:
   test:
     timeout-minutes: 30
