@@ -1,4 +1,4 @@
-import { CourseStatus, NewCourse, NewTakedCourse, TakedCourse } from "../models/courses.ts";
+import { NewCourse, NewTakedCourse, TakedCourse } from "../models/courses.ts";
 import { DBClient } from "../db/dbController.ts";
 import {
   courseCorrelativesTable,
