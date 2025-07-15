@@ -29,7 +29,8 @@ jobs:
         id: meta
         with: 
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/up-progress-backend ghcr.io/${{ github.repository }}
+            ${{ secrets.DOCKER_USERNAME }}/up-progress-backend 
+            ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest
             type=raw,value=1.0.0
