@@ -22,12 +22,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Extract version
         uses: docker/metadata-action@v4
         id: meta
         with: 
           images: |
-            ${{ secrets.DOCKER_USERNAME }}/up-progress-backend
+            ${{ secrets.DOCKER_USERNAME }}/up-progress-backend ghcr.io/${{ github.repository }}
           tags: |
             type=raw,value=latest
             type=raw,value=1.0.0
@@ -62,30 +64,31 @@ jobs:
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           tags: ${{ steps.meta.outputs.tags }}
-      - name: Create GitHub Release
-        uses: actions/github-script@v6
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          script: |
-            const tagName = "${{ steps.version.outputs.tags }}";
-            const releaseName = `Release ${tagName}`;
-            const body = `
-              Automatic release ${{ steps.version.outputs.description }}
-              **Docker Images:**
-              - \`${{ secrets.DOCKER_USERNAME }}/up-progress-backend:${tagName}\`
-              - \`ghcr.io/${{ github.repository }}:${tagName}\`
-            `;
-            const response = await github.rest.repos.createRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              tag_name: tagName,
-              name: releaseName,
-              body: body,
-              draft: false,
-              prerelease: false,
-            });
-            console.log(`Release created: ${response.data.html_url}`);  
+      # - name: Create GitHub Release
+      #   uses: actions/github-script@v6
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     script: |
+      #       const tagName = "${{ steps.version.outputs.tags }}";
+      #       console.log(`Creating release for tag: ${tagName}`);
+      #       const releaseName = `Release ${tagName}`;
+      #       const body = `
+      #         Automatic release ${{ steps.version.outputs.description }}
+      #         **Docker Images:**
+      #         - \`${{ secrets.DOCKER_USERNAME }}/up-progress-backend:${tagName}\`
+      #         - \`ghcr.io/${{ github.repository }}:${tagName}\`
+      #       `;
+      #       const response = await github.rest.repos.createRelease({
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         tag_name: tagName,
+      #         name: releaseName,
+      #         body: body,
+      #         draft: false,
+      #         prerelease: false,
+      #       });
+      #       console.log(`Release created: ${response.data.html_url}`);  
       - name: Deploy render
         if: github.ref=='refs/heads/main'
         env:
